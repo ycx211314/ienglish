@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block javascript %}
+{% endblock %}
+{% block content %}
+    <div class="row-fluid">
+        <div class="span3 padding10">
+            <div class="common_border bg_2 padding10 margintop10">
+                <div>
+                    <label class="text-success text-align">开始奋起</label>
+                </div>
+                <div class="radius-border bg_white">
+                    <ul class="nav nav-list">
+                        <li class="line-bottom active"><a href="#"><span>新闻热点</span><i class="icon-arrow-right floatright"></i></a></li>
+                        <li class="line-bottom"><a href="#">实时动态</a></li>
+                        <li class="line-bottom active"><a href="#">科技相关</a></li>
+                        <li class="line-bottom"><a href="#">健康饮食</a></li>
+                        <li class="line-bottom"><a href="#">其他相关</a></li>
+                        <li class="line-bottom"><a href="#">国际动态</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <label class="muted text-align">A B C D E F G H I J K L M N </label>
+                </div>
+            </div>
+            <div class="common_border padding10">
+                <div class="studyIcon">
+                    <div class="sty_img">交流平台</div>
+                </div>
+                <div class="sty_icon margintop10">
+                    <a href="#">
+                        <img src="/static/images/icon_write.png" />
+                        写
+                    </a>
+                    <a href="#">
+                        <img src="/static/images/icon_read.png" />
+                        读
+                    </a>
+                    <a href="#"><img src="/static/images/icon_plan.png" />
+                        计划
+                    </a>
+                </div>
+            </div>
+            <div class="common_border padding10">
+                <h5><i class="icon-search"></i>开始搜索</h5>
+                <form class="form-search padding5">
+                    <div class="input-append">
+                        <input type="text" class="search-query input-small">
+                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="common_border padding5 bg_1">
+                <div class="radius-border bg_white">联系我们</div>
+            </div>
+
+        </div>
+        <div class="span9 padding10">
+            {% block content_detail %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

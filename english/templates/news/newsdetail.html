@@ -1,0 +1,89 @@
+{% extends "base_content.html" %}
+{% block title %}{{ news.title }}{% endblock %}
+{% block otherres %}
+    <script type="text/javascript">
+        $(function(){
+            $(".englishCH").hide();
+            $(".english,.englishCH").css("cursor","pointer")
+            $(".english").tooltip({
+                placement:"top",
+                trigger:"hover click",
+                html:true,
+                title:function(){
+                    return $(this).next().html()
+                }
+            });
+            $(".translate").bind("click",function(){
+                switch ($(this).attr("data-target")){
+                    case "CH":
+                        $(".englishCH").show();
+                        $(".english").hide();
+                        break;
+                    case "EN":
+                        $(".englishCH").hide();
+                        $(".english").show();
+                        break;
+                    case "CE":
+                        $(".englishCH").show();
+                        $(".english").show();
+                        $(".english").tooltip("hide");
+                        break;
+                    default:
+                        break
+                }
+            });
+        })
+    </script>
+    <style>
+        .tooltip-inner{
+            background-color: #DBEAF9;
+            border-radius: 4px 4px 4px 4px;
+            color: #000000;
+            max-width: 500px;
+            padding: 8px;
+            margin: 0px auto;
+            font-size:12px;
+            text-align: left;
+            text-decoration: none;}
+    </style>
+{% endblock %}
+{% block content_detail %}
+    <div class="span12">
+        <ul class="breadcrumb bg_white">
+            <li><a href="/">首页</a> <span class="divider">&gt;</span></li>
+            <li><a href="/news/">双语新闻</a> <span class="divider">&gt;</span></li>
+            <li class="active">{{ news.title }}</li>
+        </ul>
+    </div>
+    <div class="span12">
+        <div class="span12">
+            <h2 class="span12">{{ news.title|escape }}</h2>
+            <h4 class="span11 offset1">{{ news.titleEnglish }}</h4>
+        </div>
+        <div class="span12">
+            <label class="span9">日期：{{ news.createDate|date:'Y-m-d'}}　　{{ news.comeFrom }}　　阅读量：{{ news.readCount }}</label>
+            <div class="span3" style="text-align: right;">
+                <div class="btn-group" data-toggle="buttons-radio">
+                    <button class="btn btn-mini btn-info translate" data-target='CH'>中</button>
+                    <button class="btn btn-mini btn-info active translate" data-target='EN'>英</button>
+                    <button class="btn btn-mini btn-info translate" data-target='CE'>双</button>
+                </div>
+            </div>
+        </div>
+        <hr class="span12" style="margin-top: 0px;">
+    </div>
+{% spaceless %}
+    <div class="span12">
+        <img src="/upload/{{ news.imageShow }}" class="img-rounded span4" style="height: 300px;" />
+        <div class="span8">
+        <h4>导读：</h4>
+        <p class="text-left">{{ news.introduce }}</p>
+        </div>
+    </div>
+    <div class="span12">
+    {% for cont in content %}
+           {{ cont|safe}}
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+{% load staticfiles %}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <script type="text/javascript" src="/static/js/main.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.json-2.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/application.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    {% block otherres %}
+    {% endblock %}
+    <META NAME="Author" CONTENT="">
+    <META NAME="Keywords" CONTENT="">
+    <META NAME="Description" CONTENT="">
+</HEAD>
+<BODY>
+<header>
+    <div class="navbar navbar-fixed-top" >
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#">i english</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li {% ifequal 1 nav.navTop %}class="active" {% endifequal %}><a href="/"></i>首　　页</a></li>
+                        <li class="divider-vertical"></li>
+                        <li {% ifequal 2 nav.navTop %}class="active" {% endifequal %}><a href="/news/">双语新闻</a></li>
+                        <li class="divider-vertical"></li>
+                        <li {% ifequal 3 nav.navTop %}class="active" {% endifequal %}><a href="#">精美阅读</a></li>
+                        <li class="divider-vertical"></li>
+                        <li {% ifequal 4 nav.navTop %}class="active" {% endifequal %}><a href="#">资料大全</a></li>
+                        <li class="divider-vertical"></li>
+                        <li {% ifequal 5 nav.navTop %}class="active" {% endifequal %}><a href="#">英语新闻</a></li>
+                        <li class="divider-vertical"></li>
+                        <li {% ifequal 5 nav.navTop %}class="active" {% endifequal %}><a href="#">关于我们</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cogs"></i><b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">登录</a></li>
+                                <li><a href="#">注册</a></li>
+                                <li><a href="#">其他</a></li>
+                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form pull-right form-search">
+                        <div class="input-append">
+                            <input class="input-small" id="appendedInputButton" type="text">
+                            <button class="btn" type="button"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+</header>
+<div class="row" style="margin-top: 45px;"></div>
+{% block content %}{% endblock %}
+<div class="row">
+    <hr class="span12">
+</div>
+<div class="modal hide fade" id="loginDialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-off"></i></button>
+        <h3><i class="icon-user icon-2x"></i>用户登录</h3>
+    </div>
+    <div class="modal-body">
+        <div class="common_border">
+            <form id="loginForm">
+                <label class="inline">用户：<input type="text" class="input-small"/></label>
+                <label class="inline">密码：<input type="text" class="input-small"/></label>
+                <label class="checkbox inline"><input type="checkbox" value="">记住用户 <a href="#">忘记密码</a></label>
+            </form>
+            <div class="btn_login">
+                <button class="btn btn-small btn-success" type="button">注册</button>
+                <button class="btn btn-small btn-success" type="button">登录</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn">登录</a>
+    </div>
+</div>
+</BODY>
+</HTML>
