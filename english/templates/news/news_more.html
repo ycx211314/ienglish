@@ -1,41 +1,83 @@
 {% extends "base_content.html" %}
 {% block title %}双语新闻{% endblock %}
 {% block content_detail %}
-    <div class="row paddingtop10">
-        <img src="/static/images/study_small_01.gif" />
-    </div>
     <div class="row padding10">
-        <div class="span4">
-            <h6>双语新闻</h6>
-        </div>
-        <div class="span8">
-            <ul class="breadcrumb bg_white floatright">
+        <div class="span12">
+            <ul class="breadcrumb bg_white">
                 <li><a href="/">首页</a> <span class="divider">&gt;</span></li>
                 <li><a href="/news/">双语新闻</a> <span class="divider">&gt;</span></li>
                 <li class="active">新闻列表</li>
             </ul>
         </div>
     </div>
-        {% for news in newses %}
-            <div class="row">
-                <span class="span1"> </span>
-                <div class="span11">
-                    <div class="span4">
-                        <img src="/upload/{{ news.imageShow }}" class="img-rounded" style="width: 100%;height: 150px;" />
-                    </div>
-                    <div class="span8">
-                        <dl class="muted nomargin">
-                            <dt>
-                               <h4><a href="/news/detail/{{ news.id }}/" >{{ news.title }}</a></h4>
-                            </dt>
-                            <dd>{{ news.createDate|date:"Y-m-d" }}</dd>
-                            <dd>{{ news.introduce }}</dd>
-                        </dl>
-                    </div>
+    <div class="row-fluid">
+        <div class="span8">
+    {% for news in newses %}
+            <div class="row-fluid">
+                <div class="span4">
+                    <img src="/upload/{{ news.imageShow }}" class="img-rounded" style="width: 100%;height: 150px;"/>
+                </div>
+                <div class="span8">
+                    <dl class="muted nomargin">
+                        <dt>
+                        <h4><a href="/news/detail/{{ news.id }}/">{{ news.title }}</a></h4>
+                        </dt>
+                        <dd>{{ news.createDate|date:"Y-m-d" }}</dd>
+                        <dd>{{ news.introduce }}</dd>
+                    </dl>
                 </div>
             </div>
             <hr>
-        {% endfor %}
+    {% endfor %}
+        </div>
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h5>24小时评论</h5>
+                    <ol class="nav nav-list">
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <h5>24最多分享</h5>
+                    <ol class="nav nav-list">
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <h5>最热门</h5>
+                    <ol class="nav nav-list">
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                        <li>sdfsdfsdfsdfsdfsdfsdf</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+         sdf
+    </div>
     <div class="row">
         <div class="span12">
             <div class="pagination pagination-centered">

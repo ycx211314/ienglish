@@ -2,21 +2,16 @@
 # __author__ = 'Administrator'
 import sched, time
 from threading import Thread, Timer
-from english.common.models import News
+from english.util.crawler.ArticleParse import ReadArticle
 from english.util.readNews import ReadNewsFrom21
-scheduler = sched.scheduler(time.time, time.sleep)
 class NewsTask(Thread):
     def run(self):
-        scheduler.enter(3,1,self.startTask,("100",))
-        scheduler.run()
-    def startTask(self,args):
-        scheduler.enter(3,1,self.startTask,("100",))
-        doSomething()
-def doSomething():
-    reader = ReadNewsFrom21(baseUrl="http://www.i21st.cn/story/index.html",rege="/story/\d{4}.html",rootUrl="http://www.i21st.cn")
-    reader.feedMsg()
-#
-
+        reader = ReadNewsFrom21(baseUrl="http://www.i21st.cn/story/index.html",rege="/story/\d{4}.html",rootUrl="http://www.i21st.cn")
+        reader.feedMsg()
+class ArticleTask(Thread):
+    def run(self):
+        reader = ReadArticle(baseUrl="http://www.yingyu.com/dx/zuowen/yymwxs/",rege="/e/\d{8}/4d\w{11}.shtml",rootUrl="http://www.yingyu.com")
+        reader.feedMsg()
 #s = sched.scheduler(time.time, time.sleep)
 #
 #class Job(Thread):

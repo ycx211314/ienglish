@@ -67,6 +67,5 @@ class F21stParse(HTMLParser):
         if self.tag == self.contentTag:
             self.startContent = False
             self.introTag = False
-
     def handle_startendtag(self, tag, attrs):
         print tag

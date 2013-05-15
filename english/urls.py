@@ -4,6 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.templatetags.static import static
 from english import settings
+from english.article.views import articleShow
 from english.common.views import *
 
 admin.autodiscover()
@@ -26,5 +27,8 @@ urlpatterns = patterns('',
     url(r'^user/login/$',login),
     url(r'^user/logout/$',logout),
     url(r'^$',index),
+
+    url(r"^read/article/detail/(\d+)/$",articleShow),
+
     url(r'^task/(\w+)/$',TaskStart)
 )

@@ -3,16 +3,6 @@
 {% block otherres %}
     <script type="text/javascript">
         $(function(){
-            $(".englishCH").hide();
-            $(".english,.englishCH").css("cursor","pointer")
-            $(".english").tooltip({
-                placement:"top",
-                trigger:"hover click",
-                html:true,
-                title:function(){
-                    return $(this).next().html()
-                }
-            });
             $(".translate").bind("click",function(){
                 switch ($(this).attr("data-target")){
                     case "CH":
@@ -34,34 +24,22 @@
             });
         })
     </script>
-    <style>
-        .tooltip-inner{
-            background-color: #DBEAF9;
-            border-radius: 4px 4px 4px 4px;
-            color: #000000;
-            max-width: 500px;
-            padding: 8px;
-            margin: 0px auto;
-            font-size:12px;
-            text-align: left;
-            text-decoration: none;}
-    </style>
 {% endblock %}
 {% block content_detail %}
     <div class="span12">
         <ul class="breadcrumb bg_white">
             <li><a href="/">首页</a> <span class="divider">&gt;</span></li>
-            <li><a href="/news/">双语新闻</a> <span class="divider">&gt;</span></li>
-            <li class="active">{{ news.title }}</li>
+            <li><a href="/read/">精美阅读</a> <span class="divider">&gt;</span></li>
+            <li><a href="/read/article/">短文欣赏</a> <span class="divider">&gt;</span></li>
+            <li class="active">{{ artcicle.displayName }}</li>
         </ul>
     </div>
     <div class="span12">
         <div class="span12">
-            <label><h2 class="span12">{{ news.title|escape }}</h2></label>
-            <label><h4 class="span11">{{ news.titleEnglish }}</h4></label>
+            <label><h2 class="span12">{{ artcicle.displayName|escape }}</h2></label>
         </div>
         <div class="span12">
-            <label class="span9">日期：{{ news.createDate|date:'Y-m-d'}}　　{{ news.comeFrom }}　　阅读量：{{ news.readCount }}</label>
+            <label class="span9">日期：{{ artcicle.createDate|date:'Y-m-d'}}　　阅读量：{{ artcicle.pointCount }}</label>
             <div class="span3" style="text-align: right;">
                 <div class="btn-group" data-toggle="buttons-radio">
                     <button class="btn btn-mini btn-info translate" data-target='CH'>中</button>
@@ -74,23 +52,20 @@
     </div>
 {% spaceless %}
     <div class="span12">
-        <div class="span8">
-        <h4>导读：</h4>
-        <p class="text-left">{{ news.introduce }}</p>
-        </div>
-    </div>
-    <div class="span12">
-        <div class="span3">
-            <img src="/upload/{{ news.imageShow }}" class="img-rounded" />
-        </div>
-        <div class="span9">
-            {% for cont in content %}
-                {{ cont|safe}}
-            {% endfor %}
-            <hr>
-            <div class="row-fluid">
-                <div class="span12">评论</div>
+        {% if artcicle.read %}
+            <div class="span3">
+                <img src="/upload/{{ artcicle.imageShow }}" class="img-rounded" />
             </div>
+        {% endif %}
+        <div class="span6">
+            <p class="english">{{ artcicle.content|safe }}</p>
+        </div>
+        <div class="span6">
+            <p class="englishCH" style="display: none;">{{ artcicle.contentCH|safe }}</p>
+        </div>
+        <hr>
+        <div class="row-fluid">
+            <div class="span12">评论</div>
         </div>
     </div>
 {% endspaceless %}

@@ -26,8 +26,6 @@ class News(models.Model):
         self.readCount = 0
         self.createDate = datetime.datetime.now()
         super(News, self).save(*args, **kwargs)
-
-
 # 注册用户
 class StudyUser(models.Model):
     userName = models.CharField(max_length=50,verbose_name="用户名")

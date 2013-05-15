@@ -1,22 +1,23 @@
 # Create your views here.
 # --*-- coding:utf-8 --*--
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 
 #跳转到主页
 from django.template import RequestContext
+from english.article.models import ShortArticel
 from english.common.encoder import getJson
 from english.common.models import News, StudyUser
 
 #进入首页
 from english.urlConfig import urlMatch
-from english.util.Task import NewsTask
+from english.util.Task import NewsTask, ArticleTask
 
 def index(request):
-    news = News.objects.order_by("-createDate").all()[:5] #查询新闻前5条
+    news = News.objects.order_by("-createDate").all()[:10] #查询新闻前5条
+    shortArticle = ShortArticel.objects.order_by("-pointCount").all()[:10]
     nav = urlMatch(request.path)
-    return render_to_response('index.html', {"news": news,"nav":nav}, context_instance=RequestContext(request))
+    return render_to_response('index.html', {"news": news,"nav":nav,"article":shortArticle}, context_instance=RequestContext(request))
 #用户登录
 def login(request):
     if request.method == 'POST':
@@ -76,5 +77,8 @@ def newDetail(request, offset):
 def TaskStart(request,comand):
     if comand and str(comand) == "start":
         task = NewsTask()
+        task.start()
+    if comand and str(comand) == "art":
+        task = ArticleTask()
         task.start()
     return HttpResponse("/admin/login/")

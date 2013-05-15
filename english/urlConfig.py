@@ -3,8 +3,9 @@ import re
 
 __author__ = 'Administrator'
 urlConfigs = {
-    "/":1,
-    "/news/\.?":2,
+    r"^/$":1,
+    r"/news/\.?":2,
+    r"/read/\.?":3,
     }
 class Nav:
     def __init__(self):
@@ -17,4 +18,5 @@ def urlMatch(path):
         pattern = re.compile(key)
         if pattern.match(path):
             nav.navTop = value
+            break
     return nav
