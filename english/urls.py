@@ -27,8 +27,8 @@ urlpatterns = patterns('',
     url(r'^user/login/$',login),
     url(r'^user/logout/$',logout),
     url(r'^$',index),
-
+    url(r'^registerpre/$',RegPre),
+    url(r'^register/$',Reg),
     url(r"^read/article/detail/(\d+)/$",articleShow),
-
     url(r'^task/(\w+)/$',TaskStart)
 )

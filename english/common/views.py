@@ -82,3 +82,11 @@ def TaskStart(request,comand):
         task = ArticleTask()
         task.start()
     return HttpResponse("/admin/login/")
+#注册前信息查询
+def RegPre(request):
+    print(r'查询注册使用的信息，地市 and so on')
+    return render_to_response(r'regist.html')
+
+def Reg(request):
+    print ('注册操作')
+    return render_to_response(r'forward.html',{'alertMessage':'注册成功','redirectUrl':'/index'});
