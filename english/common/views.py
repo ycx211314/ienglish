@@ -103,5 +103,5 @@ def Reg(request):
     try:
         StudyUser.save(user);
     except RuntimeError:
-        print('值错误，请重新注册!');
+        return render_to_response(r'forward.html',{"alertMessage":"注册失败，请重新注册","redirectUrl":"/index/"});
     return render_to_response(r'forward.html',{"alertMessage":"注册成功","redirectUrl":"/index/"});
