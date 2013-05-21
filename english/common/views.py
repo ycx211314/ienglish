@@ -8,6 +8,7 @@ from django.template import RequestContext
 from english.article.models import ShortArticel
 from english.common.encoder import getJson
 from english.common.models import News, StudyUser
+from datetime import datetime
 
 #进入首页
 from english.urlConfig import urlMatch
@@ -85,8 +86,22 @@ def TaskStart(request,comand):
 #注册前信息查询
 def RegPre(request):
     print(r'查询注册使用的信息，地市 and so on')
-    return render_to_response(r'regist.html')
+    return render_to_response(r'regist.html',context_instance=RequestContext(request))
 
 def Reg(request):
-    print ('注册操作')
-    return render_to_response(r'forward.html',{'alertMessage':'注册成功','redirectUrl':'/index'});
+    user = StudyUser();
+    user.passwords =  request.POST['password'];
+    user.userName =  request.POST['userName'];
+    user.email = request.POST['email'];
+    user.nickName = request.POST['nickName'];
+    #user.photo = request.POST['photo']
+    user.thirdType = 1
+    user.thirdId = '1';
+    user.third = '1';
+    user.thirdScrite = '1';
+    user.regDate = datetime.now().strftime('%Y-%m-%d' )
+    try:
+        StudyUser.save(user);
+    except RuntimeError:
+        print('值错误，请重新注册!');
+    return render_to_response(r'forward.html',{"alertMessage":"注册成功","redirectUrl":"/index/"});
