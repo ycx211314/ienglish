@@ -9,6 +9,7 @@
     <script type="text/javascript" src="/static/js/jquery.json-2.4.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/application.js"></script>
+    <script type="text/javascript" src="/static/js/all.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
@@ -40,15 +41,22 @@
                         <li {% ifequal 4 nav.navTop %}class="active" {% endifequal %}><a href="#">资料大全</a></li>
                         <li class="divider-vertical"></li>
                         <li {% ifequal 5 nav.navTop %}class="active" {% endifequal %}><a href="#">关于我们</a></li>
+                        <!--木有登录 -->
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cogs"></i><b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">登录</a></li>
-                                <li><a href="/registerpre/">注册</a></li>
-                                <li><a href="#">其他</a></li>
-                                <li class="divider"></li>
+                                {% if not request.session.loginFlag %}
+                                    <li><a href="javascript:English.index.loginShow(true);">登录</a></li>
+                                    <li><a href="#">注册</a></li>
+                                {% else %}
+                                    <li><a href="javascript:void(0);" >{{ request.session.login.nickName }}</a></li>
+                                    <li><a href="javascript:English.index.loginOut();">注销</a></li>
+                                {% endif %}
                             </ul>
                         </li>
+                        <!-- end 木有登录-->
+                        <!-- 登录成功 -->
+
                     </ul>
                     <form class="navbar-form pull-right form-search">
                         <div class="input-append">
@@ -66,26 +74,61 @@
 <div class="row">
     <hr class="span12">
 </div>
+<div class="navbar navbar-fixed-bottom" >
+    <div class="navbar-inner">
+        <div class="container">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cogs"></i><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {% if request.session.loginFlag %}
+                                <li><a href="javascript:login(true);">登录</a></li>
+                                <li><a href="#">注册</a></li>
+                            {% else %}
+                                <li><a href="javascript:void(0);" >{{ request.session.login.nickName }}</a></li>
+                                <li><a href="#">注销</a></li>
+                            {% endif %}
+                            <li class="divider"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
 <div class="modal hide fade" id="loginDialog">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-off"></i></button>
         <h3><i class="icon-user icon-2x"></i>用户登录</h3>
     </div>
     <div class="modal-body">
-        <div class="common_border">
-            <form id="loginForm">
-                <label class="inline">用户：<input type="text" class="input-small"/></label>
-                <label class="inline">密码：<input type="text" class="input-small"/></label>
-                <label class="checkbox inline"><input type="checkbox" value="">记住用户 <a href="#">忘记密码</a></label>
+            <form class="form-horizontal" id="loginFm" method="post" action="/user/login/">
+                <div class="control-group">
+                    <label class="control-label">用户：</label>
+                    <div class="controls">
+                        <input type="text" class="input-medium" name="username" placeholder="Email"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">密码：</label>
+                    <div class="controls">
+                        <input type="password" class="input-medium" name="password"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox"> 记住用户  <a href="#">忘记密码</a>
+                        </label>
+                    </div>
+                </div>
+                {% csrf_token %}
             </form>
-            <div class="btn_login">
-                <button class="btn btn-small btn-success" type="button">注册</button>
-                <button class="btn btn-small btn-success" type="button">登录</button>
-            </div>
-        </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn">登录</a>
+        <a href="javascript:login(false)" class="btn btn-success">取　消</a>
+        <input type="submit"class="btn btn-success" value="登　录" form="loginFm"/>
     </div>
 </div>
 </BODY>

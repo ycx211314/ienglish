@@ -1,5 +1,5 @@
 $(function(){
-    $('#index_loginForm').ajaxForm({
+    $('#loginFm').ajaxForm({
         beforeSubmit:  showRequest,  // pre-submit callback
         success:       showResponse  // post-submit callback
     });
@@ -13,9 +13,10 @@ function showResponse(responseText, statusText, xhr, $form)  {
     if(statusText == "success"){
         var json = $.evalJSON(responseText);
         if(json && json.flag == "ok"){
-            $('#index_loginForm').resetForm();
-            $("#userInfoDiv").show();
-            $("#loginDiv").hide();
+//            $('#index_loginForm').resetForm();
+//            $("#userInfoDiv").show();
+//            $("#loginDiv").hide();
+            alert(1)
         }else{
 
         }

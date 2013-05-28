@@ -8,6 +8,6 @@ function addfavorite() {
         window.sidebar.addPanel('英语学习网', 'http://127.0.0.1:8000/', "");
     }
 }
-function login(){
-    $('#loginDialog').modal("show");
+function login(flag){
+
 }

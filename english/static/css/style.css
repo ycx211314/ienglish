@@ -46,6 +46,8 @@ div >.tabs-below > .nav-tabs >li{width:33%;}
 .bg_3{background-color:#FFFFCC;}
 .bg_4{background-color:#90d6e3;}
 .bg_img_1{background:url(../images/panel_bg.png);}
+a:hover{text-decoration: none;}
+p,h1,h2,h3,h4,h5,h6,span{cursor:default;}
 /**
 每日一句 tab
 **/

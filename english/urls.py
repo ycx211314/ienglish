@@ -21,14 +21,20 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^news/(\d+)/$',newsMore),
     url(r'^news/$',newsMore),
     url(r'^news/detail/(\d+)/$',newDetail),
+    url(r"^news/read/(\d+)/$",readNews),
+    url(r'^news/comment/add/$',addCommont),
+
+
     url(r'^index/$',index),
     url(r'^user/login/$',login),
     url(r'^user/logout/$',logout),
     url(r'^$',index),
-    url(r'^registerpre/$',RegPre),
-    url(r'^register/$',Reg),
+
     url(r"^read/article/detail/(\d+)/$",articleShow),
+
     url(r'^task/(\w+)/$',TaskStart)
 )

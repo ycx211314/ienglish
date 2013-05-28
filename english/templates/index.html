@@ -15,11 +15,10 @@
                 offset: {x: 100, y: 0}
             })
             $('#accordionNav').on('hidden',function () {
-                // do something…
                 $("#angle").attr("class", "icon-angle-down");
             }).on("show", function () {
                         $("#angle").attr("class", "icon-angle-up");
-                    })
+            })
         })
         audiojs.events.ready(function () {
             var as = audiojs.createAll();
@@ -36,7 +35,6 @@
             overflow: hidden;
             width: 90%;
         }
-
         .audiojs .scrubber {
             background: none repeat scroll 0 0 #5A5A5A;
             border-bottom: 0 none;
@@ -54,23 +52,19 @@
             right: 20px;
             top: 200px;
         }
-
         .leftNav li {
             line-height: 10px;
         }
-
         .topicHead {
             background-color: #3C889F;
             text-align: center;
             line-height: 30px;
             color: #FFF;
         }
-
         .leftBorder {
             border: 1px solid #E5E5E5;
             border-radius: 4px 4px 4px 4px;
         }
-
         .leftBorder * {
             border: 0px;
         }
@@ -122,7 +116,6 @@
                         {% if forloop.first %}
                             <div class="active item">
                                 <img src="/upload/{{ ns.imageShow }}" style="height: 220px;width: 100%;">
-
                                 <div style="height:30px;color: #fff;background: none repeat scroll 0 0 #222222;">
                                     <a href="/news/detail/{{ ns.id }}"><strong>{{ ns.title }}</strong></a>
                                 </div>

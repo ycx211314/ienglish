@@ -10,16 +10,38 @@ ADMINS = (
 )
 APPEND_SLASH=False
 MANAGERS = ADMINS
-
+#
+#if 'SERVER_SOFTWARE' in os.environ:
+#    from sae.const import (
+#        MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
+#        )
+#else:
+#    # Make `python manage.py syncdb` works happy!
+#    MYSQL_HOST = 'localhost'
+#    MYSQL_PORT = '3306'
+#    MYSQL_USER = 'root'
+#    MYSQL_PASS = 'root'
+#    MYSQL_DB = 'app_pylabs'
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'english',
+#         'USER': 'root',
+#         'PASSWORD': 'admin',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#         }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'english',                      # Or path to database file if using sqlite3.
-        'USER': 'english',                      # Not used with sqlite3.
-        'PASSWORD': '123456',                  # Not used with sqlite3.
-        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+       'NAME': 'english',                      # Or path to database file if using sqlite3.
+       'USER': 'english',                      # Not used with sqlite3.
+       'PASSWORD': '123456',                  # Not used with sqlite3.
+       'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+       'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
+   }
 }
 
 # Local time zone for this installation. Choices can be found here:

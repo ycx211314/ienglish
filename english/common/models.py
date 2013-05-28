@@ -12,6 +12,7 @@ class News(models.Model):
     contentEnglish = models.TextField(verbose_name="英文内容")
     hot = models.BooleanField(verbose_name="是否热点")
     readCount = models.IntegerField(verbose_name="阅读数量",default=0)
+    shareCount = models.IntegerField(verbose_name="分享数量",default=0)
     comeFrom = models.CharField(max_length=200,verbose_name="来源")
     imageShow = models.ImageField(verbose_name="插图",upload_to="newsImg")
     lastUpdateFlag = models.IntegerField(default=0)
@@ -24,8 +25,15 @@ class News(models.Model):
         return self.title
     def save(self, *args, **kwargs):
         self.readCount = 0
+        self.shareCount = 0
         self.createDate = datetime.datetime.now()
         super(News, self).save(*args, **kwargs)
+
+class Comment(models.Model):
+    user = models.ForeignKey('StudyUser')
+    message = models.CharField(max_length=200)
+    news = models.ForeignKey('News')
+    createTs = models.DateTimeField()
 # 注册用户
 class StudyUser(models.Model):
     userName = models.CharField(max_length=50,verbose_name="用户名")

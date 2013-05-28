@@ -12,4 +12,4 @@ def articleShow(request,artId):
         raise Http404()
     shortArt = ShortArticel.objects.filter(id=id)[0]
     nav = urlMatch(request.path)
-    return render_to_response(r'resource\artcicle.html', {"artcicle": shortArt,"nav":nav,}, context_instance=RequestContext(request))
+    return render_to_response(r'resource/artcicle.html', {"artcicle": shortArt,"nav":nav,}, context_instance=RequestContext(request))

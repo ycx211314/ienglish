@@ -1,5 +1,6 @@
 # Create your views here.
 # --*-- coding:utf-8 --*--
+import datetime
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 
@@ -7,8 +8,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from english.article.models import ShortArticel
 from english.common.encoder import getJson
-from english.common.models import News, StudyUser
-from datetime import datetime
+from english.common.models import News, StudyUser, Comment
 
 #进入首页
 from english.urlConfig import urlMatch
@@ -48,17 +48,54 @@ def logout(request):
         return HttpResponse(json)
 #新闻相关
 def newsMore(request,page=1):
-    newsall = News.objects.all()[0:10]
+    try:
+        page = int(page)
+    except ValueError:
+        raise Http404()
+    st = (page -1) * 10
+    ed = page * 10
+    newsall = News.objects.all()
+    topNews = News.objects.order_by("-readCount").all()[0:10]
+    topShare = newsall.order_by("-shareCount")[0:10]
+    total = len(newsall)
+    if total % 10 == 0:
+        pages = total / 10
+    else:
+        pages = int((total + 10) / 10)
+    panations = []
+    if page > 1:
+        panations.append(page-1)
+    else:
+        panations.append(1)
+    if page < 5:
+        for x in range(1,11):
+            panations.append(x)
+            if x >=  pages:
+                break
+    else:
+        for x in range(page - 1,page - 1 + 10):
+            panations.append(x)
+            if x > pages:
+                break
+    if page+1 > pages:
+        panations.append(page)
+    else:
+        panations.append(page+1)
     nav = urlMatch(request.path)
-    return render_to_response(r'news\news_more.html', {"newses":newsall,"nav":nav}, context_instance=RequestContext(request))
-
-
+    pagedict = {"newses":newsall[st:ed],
+                "topNews": topNews,
+                "topShare":topShare,
+                "nav":nav,
+                "panation":panations,
+                "lastPage":pages,
+                "curPage":page}
+    return render_to_response(r'news/news_more.html',pagedict,context_instance=RequestContext(request))
 def newDetail(request, offset):
     try:
         offset = int(offset)
     except ValueError:
         raise Http404()
-    news = News.objects.filter(id=offset)[0]
+    news = News.objects.get(id=offset)
     contentEN = news.content.split("###")
     contetnCH = news.contentEnglish.split("###")
     contentDict = []
@@ -71,10 +108,33 @@ def newDetail(request, offset):
             contentDict.append('<p class="english">'+contentEN[index]+'</p>')
             contentDict.append('<p class="englishCH" id="tip'+str(index)+'">'+contetnCH[index]+'</p>')
         index = index +1
+    comments = Comment.objects.filter(news = offset).order_by("-createTs").all()
     nav = urlMatch(request.path)
-    return render_to_response(r'news\newsdetail.html', {"news": news,"content":contentDict,"nav":nav}, context_instance=RequestContext(request))
+    return render_to_response(r'news/newsdetail.html', {"news": news,"content":contentDict,"nav":nav,"comments":comments}, context_instance=RequestContext(request))
+def readNews(request,id):
+    try:
+        id = int(id)
+    except ValueError:
+        pass
+    updateVo = News.objects.get(id=id)
+    count = updateVo.readCount + 1
+    News.objects.filter(id=id).update(readCount = count)
+    json = getJson({'flag':'ok'})
+    return HttpResponse(json)
 
-
+def addCommont(request):
+    if request.method == 'POST':
+        newId = request.POST['newsId']
+        comment = Comment()
+        comment.message =  request.POST['comment']
+        comment.user = request.session['login']
+        comment.news = News.objects.get(id=newId)
+        comment.createTs = datetime.datetime.now()
+        comment.save()
+        json = getJson({'flag':'ok'})
+    else:
+        json = getJson({'flag':'no'})
+    return HttpResponse(json)
 def TaskStart(request,comand):
     if comand and str(comand) == "start":
         task = NewsTask()
@@ -83,25 +143,3 @@ def TaskStart(request,comand):
         task = ArticleTask()
         task.start()
     return HttpResponse("/admin/login/")
-#注册前信息查询
-def RegPre(request):
-    print(r'查询注册使用的信息，地市 and so on')
-    return render_to_response(r'regist.html',context_instance=RequestContext(request))
-
-def Reg(request):
-    user = StudyUser();
-    user.passwords =  request.POST['password'];
-    user.userName =  request.POST['userName'];
-    user.email = request.POST['email'];
-    user.nickName = request.POST['nickName'];
-    #user.photo = request.POST['photo']
-    user.thirdType = 1
-    user.thirdId = '1';
-    user.third = '1';
-    user.thirdScrite = '1';
-    user.regDate = datetime.now().strftime('%Y-%m-%d' )
-    try:
-        StudyUser.save(user);
-    except RuntimeError:
-        return render_to_response(r'forward.html',{"alertMessage":"注册失败，请重新注册","redirectUrl":"/index/"});
-    return render_to_response(r'forward.html',{"alertMessage":"注册成功","redirectUrl":"/index/"});
