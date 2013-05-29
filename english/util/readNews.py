@@ -2,7 +2,7 @@
 import datetime
 import uuid
 from django.core.files.base import ContentFile
-from english.common.models import News
+from english.news.models import News
 from english.util.newsParser import F21stParse
 
 __author__ = 'Administrator'

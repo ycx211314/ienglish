@@ -7,8 +7,8 @@ from django.shortcuts import render_to_response
 #跳转到主页
 from django.template import RequestContext
 from english.article.models import ShortArticel
-from english.common.encoder import getJson
-from english.common.models import News, StudyUser, Comment
+from english.news.encoder import getJson
+from english.news.models import News, Comment
 
 #进入首页
 from english.urlConfig import urlMatch

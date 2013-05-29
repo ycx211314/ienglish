@@ -49,7 +49,11 @@
                                 <p>{{ news.introduce }}</p>
                             </div>
                             <div class="span12 text-right">
-                                <span class="span5"></span>
+                                <span class="span2"></span>
+                                <a href="/news/detail/{{ news.id }}/" class="span3 text-right">
+                                    <i class="icon-share"></i>
+                                    阅读（{{ news.shareCount }}）
+                                </a>
                                 <a href="/news/detail/{{ news.id }}/" class="span3 text-right">
                                     <i class="icon-share"></i>
                                     分享（{{ news.shareCount }}）

@@ -1,6 +1,6 @@
 # --*-- coding:utf-8 --*--
 from django.contrib import admin
-from english.common.models import News, StudyUser
+from english.news.models import News
 
 __author__ = 'Administrator'
 class NewsAdmin(admin.ModelAdmin):
@@ -12,4 +12,3 @@ class NewsAdmin(admin.ModelAdmin):
     fields = ('title','titleEnglish','content','contentEnglish','hot','imageShow','comeFrom',)
     #filter_horizontal = ('title',)
 admin.site.register(News,NewsAdmin)
-admin.site.register(StudyUser)
