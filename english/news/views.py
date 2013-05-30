@@ -82,9 +82,17 @@ def readNews(request,id):
         id = int(id)
     except ValueError:
         pass
+    if request.GET["share"]:
+        try:
+            share = int(request.GET["share"])
+        except:
+            share = 0
     updateVo = News.objects.get(id=id)
     count = updateVo.readCount + 1
-    News.objects.filter(id=id).update(readCount = count)
+    if share != 0:
+        News.objects.filter(id=id).update(readCount = count,shareCount=share)
+    else:
+        News.objects.filter(id=id).update(readCount = count)
     json = getJson({'flag':'ok'})
     return HttpResponse(json)
 

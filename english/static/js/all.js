@@ -19,8 +19,8 @@ English.Common.News = function(id){
     this.id = id;
 }
 English.Common.News.prototype={
-    readNews:function(){
-        $.get("/news/read/"+this.id+"/")
+    readNews:function(share){
+        $.get("/news/read/"+this.id+"/",{"share":share})
     }
 }
 Namespace.register("English.index");

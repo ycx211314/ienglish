@@ -3,6 +3,7 @@
 import sched, time
 from threading import Thread, Timer
 from english.util.crawler.ArticleParse import ReadArticle
+from english.util.crawler.BusinessEssayParse import *
 from english.util.readNews import ReadNewsFrom21
 class NewsTask(Thread):
     def run(self):
@@ -12,6 +13,10 @@ class ArticleTask(Thread):
     def run(self):
         reader = ReadArticle(baseUrl="http://www.yingyu.com/dx/zuowen/yymwxs/",rege="/e/\d{8}/4d\w{11}.shtml",rootUrl="http://www.yingyu.com")
         reader.feedMsg()
+class BusinessTask(Thread):
+    def run(self):
+        feedBusiness()
+        #business300()
 #s = sched.scheduler(time.time, time.sleep)
 #
 #class Job(Thread):

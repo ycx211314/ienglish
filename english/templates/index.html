@@ -250,6 +250,11 @@
                 </div>
                 <div class="span4 well">
                     <h3>热门文章</h3>
+                    <ul class="nav nav-list">
+                        {% for art in business %}
+                            <li><a href="/read/english/detail/{{ art.id }}/"><small>【{{ art.category }}】{{ art.displayName}}</small></a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 <div class="span4 well">
                     <h3>热门资料</h3>
