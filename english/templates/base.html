@@ -29,7 +29,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="#">i english</a>
+                <a class="brand" href="/">爱英语</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li {% ifequal 1 nav.navTop %}class="active" {% endifequal %}><a href="/"></i>首　　页</a></li>
@@ -47,7 +47,9 @@
                             <ul class="dropdown-menu">
                                 {% if not request.session.loginFlag %}
                                     <li><a href="javascript:English.index.loginShow(true);">登录</a></li>
-                                    <li><a href="user/registerpre/">注册</a></li>
+                                    <li>
+                                        <a href="/user/registerpre/">注册</a>
+                                    </li>
                                 {% else %}
                                     <li><a href="javascript:void(0);" >{{ request.session.login.nickName }}</a></li>
                                     <li><a href="javascript:English.index.loginOut();">注销</a></li>

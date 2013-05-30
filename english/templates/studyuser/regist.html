@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block title %}学员注册{% endblock %}
 {% block otherres %}
-    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet"/>
     <script type="text/javascript">
         $(function () {
             $(".controls>input[type='text']").val("");
-            $(".controls>input").blur(function () {
+            $(".controls>input[type!='file'][type!='button']").blur(function () {
                 var vtor =new English.Validation.validation($(this));
                 vtor.validate();
             });
@@ -14,63 +13,120 @@
         console.debug($("#regForm input"));
         return false;
     }
+    function uploadPhoto(){
+        document.getElementById("photofile").files=null;
+        $("#photofile").click();
+        //setTimeout(showImg,1000);
+    }
+    function showImg(){
+        if(!document.getElementById("photofile").files){
+            $("#photofile").next(".help-inline").html("你的浏览器不支持图片预览");
+            return;
+        }
+        var file = document.getElementById("photofile").files[0];
+        if (file){
+            if (! /image\/\w+/.test(file.type)){
+                $("#photofile").next(".help-inline").html("请选择图片上传");
+            }else{
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend=function(e){
+                    document.getElementById("prePhoto").src=reader.result;
+                }
+            }
+        }else{
+            setTimeout(showImg,1000);
+        }
+    }
     </script>
 {% endblock %}
 {% block content %}
-    <form class="form-horizontal" method="post" action="/register/" id="regForm" onsubmit="formSubmit();">
-        <fieldset>
-            <legend><b>学员注册</b></legend>
-            {% csrf_token %}
-            <div class="control-group">
-                <label class="control-label" for="userName">账号:</label>
-                <div class="controls">
-                    <input class="input-xlarge" id="userName" name="userName"
-                           type="text"   autofocus="true"
-                           placeholder="账户必须是字母、数字、下划线组成，长度为6-30位之间！"
-                           required="true" pattern="^[0-9a-zA-Z_]{6,16}$"/>
-                    <span class="help-inline"></span>
+    <div class="row well">
+        <div class="span12">
+            <h4>学员注册</h4>
+            <hr>
+        </div>
+            <form class="form-horizontal row-fluid" method="post" action="/register/" id="regForm" onsubmit="formSubmit();">
+                <div class="span12">
+                    {% csrf_token %}
+                    <div class="control-group">
+                        <label class="control-label" for="userName">账号:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" id="userName" name="userName"
+                                   type="text"   autofocus="true"
+                                   placeholder="账户必须是字母、数字、下划线组成，长度为6-30位之间！"
+                                   required="true" pattern="^[0-9a-zA-Z_]{6,16}$"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password">密码:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" id="password" type="password" required="true"
+                                   placeholder="密码必须为字母、数字，下划线" pattern='^[0-9a-zA-Z_]{6,16}$'><span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="repassword">确认密码:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" id="repassword" type="password" equalTo="password" name="password"  required="true"
+                                   placeholder="请确认密码"> <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="nickName">昵称:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" id="nickName" name="nickName" type="text" required="true" placeholder="请输入昵称">
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="email">邮箱:</label>
+                        <div class="controls">
+                            <input class="input-xlarge" id="email" name="email" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$" type="text" required="true" placeholder="请输入常用邮箱" >
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="photofile">头像:</label>
+                        <div class="controls">
+                            <img id="prePhoto" src="/static/images/defaut.jpg" class="img-polaroid" style="width: 100px;height: 100px;">
+                            <input type="button" class="btn btn-info" onclick="uploadPhoto();" value="头像上传">
+                            <input class="input-file" id="photofile" type="file" style="display: none;" onchange="showImg()">
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">同意以下协议并注册</button>
+                        <button class="btn">取消</button>
+                    </div>
+                </div>
+            </form>
+            <div class="userKnow row">
+                <div>
+                    <div>
+                        <h5>用户须知</h5>
+                    </div>
+                </div>
+                <div>
+                    <p> 作为盛大游戏运营的众多优秀网络游戏之一，《热血传奇》拥有完善的游戏机制和强壮的运行能力。为了各位用户能够更好的享受《热血传奇》中的每个精彩时刻，您应该遵守以下守则：<br>
+                        一、 用户之间人人平等，这是我们对您进行服务的准则。我们努力使每个用户获得同等质量的服务，您也应该做到尊重其他用户的权利，不进行任何可能会侵害其他用户游戏质量的活动。<br>
+                        二、 网络游戏基于人人互动才能精彩，为了使你在虚拟世界中拥有更多的朋友，请在游戏中注意言行举止，礼貌用语。对于语言污秽的用户，“热血传奇”管理小组在获得举报后将会采取禁言等措施进行管理。<br>
+                        三、 公平游戏是享受游戏的前提，正如每一个人都知道的，任何程序都存在BUG，虽然我们已经解决了所有已知的BUG，但是不能排除其他BUG存在的可能性。作为游戏用户，应该能够在发现BUG时主动向“热血传奇”管理小组汇报。严禁利用任何BUG进行任何形式的获利，这些获利包括但不限于获得额外的经验值，道具物品等。一经发现，“热血传奇”管理小组将有权利对该用户处以相关处罚（包括但不限于游戏内的监禁及关闭账户等）。 <br>
+                        四、 由于虚拟物品与现实财产之间的交易存在巨大风险（包括但不限于虚拟物品因系复制物品而可被删除、国家法律对虚拟物品的价值认定存在空白等），请用户慎重对待以真实货币或者财物与游戏内虚拟货币或者物品之间进行的交易行为，除非您在此类交易行为进行的过程中得到我们书面的明确说明、指导和确认，我们不会对这一类交易中产生的任何问题（包括但不限于物品非复制性的确认、用户诚信的确认等）进行支持或者保障。在任何情况下，您不得以从其他用户处获得虚拟物品或货币所付出的真实货币或财物金额要求盛大游戏赔偿。<br>
+                        <font color="#FF0000"><strong>五、如果您选择进入能够进行自由对战的服务器，视为您同意在该游戏区中进行自由对战，并同意遵守自由对战的游戏规则。<br>
+                            六、每个用户在安装《热血传奇》客户端时，一旦选择“使用下载器免维护自动更新功能”，即视为您同意安装并使用盛大游戏下载器，为您提供免费增值服务，包括但不限于提供盛大游戏其他游戏客户端、自动更新并安装《热血传奇》最新版本。</strong></font><br>
+                        七、您理解并同意，盛大游戏有权利向您搜集必要的数据，以了解用户需求，不断提升服务质量。<br>
+                        八、 为了保证游戏公平性，“热血传奇”管理将不会介入到任何用户之间纠纷中去。<br>
+                        九、 每个用户均有请求游戏管理人员帮助的权利，但是，为了能够让更多的人获得帮助，每个用户应该自觉不与“热血传奇”管理人员闲聊。“热血传奇”管理人员有权利不回答与工作无关的闲聊话题。<br>
+                        十、 每个用户均有监督“热血传奇”管理人员的权利，如果您发现游戏管理人员任何违规行为，均可以采用游戏提供的截图方式（保障图片真实性）获取现场，并将投诉内容通过email提交到tousu@snda.com，我们的纪律检查部门将会对该名游戏管理员进行检查。<br>
+                        十一、 理解并且遵守盛大游戏颁布的用户守则和服务承诺以及其他规定。</p>
+                    <p><br>
+                    </p>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="password">密码:</label>
-                <div class="controls">
-                    <input class="input-xlarge" id="password" type="password" required="true"
-                           placeholder="密码必须为字母、数字，下划线" pattern='^[0-9a-zA-Z_]{6,16}$'><span class="help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="repassword">确认密码:</label>
-                <div class="controls">
-                    <input class="input-xlarge" id="repassword" type="password" equalTo="password" name="password"  required="true"
-                           placeholder="请确认密码"> <span class="help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="nickName">昵称:</label>
-                <div class="controls">
-                    <input class="input-xlarge" id="nickName" name="nickName" type="text" required="true" placeholder="请输入昵称">
-                    <span class="help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="email">邮箱:</label>
-                <div class="controls">
-                    <input class="input-xlarge" id="email" name="email" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$" type="text" required="true" placeholder="请输入常用邮箱" >
-                    <span class="help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="photofile">头像:</label>
-                <div class="controls">
-                    <input class="input-file" id="photofile" type="file">
-                </div>
-            </div>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">注册</button>
-                <button class="btn">取消</button>
-            </div>
-        </fieldset>
-    </form>
+        </div>
+
 {% endblock %}
 
 

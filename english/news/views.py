@@ -1,51 +1,17 @@
 # Create your views here.
 # --*-- coding:utf-8 --*--
-import datetime
+import datetime,os
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 
 #跳转到主页
 from django.template import RequestContext
-from english.article.models import ShortArticel
 from english.news.encoder import getJson
 from english.news.models import News, Comment
 
 #进入首页
 from english.urlConfig import urlMatch
 from english.util.Task import NewsTask, ArticleTask
-
-def index(request):
-    news = News.objects.order_by("-createDate").all()[:10] #查询新闻前5条
-    shortArticle = ShortArticel.objects.order_by("-pointCount").all()[:10]
-    nav = urlMatch(request.path)
-    return render_to_response('index.html', {"news": news,"nav":nav,"article":shortArticle}, context_instance=RequestContext(request))
-#用户登录
-def login(request):
-    if request.method == 'POST':
-        if 'username' in request.POST and request.POST['username'] and 'password' in request.POST and request.POST[
-                                                                                                      'password']:
-            name = request.POST['username']
-            psw = request.POST['password']
-            student = StudyUser.objects.filter(userName=name, passwords=psw)
-            if len(student):
-                stu = student[0]
-                stu.passwords='null'
-                request.session['loginFlag'] = True
-                request.session['login'] = stu
-                json = getJson({'login':stu,'flag':'ok'})
-        else:
-            json = getJson({'flag':'no'})
-        return HttpResponse(json)
-#用户退出
-def logout(request):
-    if request.method == 'GET':
-        try:
-            del request.session['loginFlag']
-            del request.session['login']
-            json = getJson({'flag':'ok'})
-        except KeyError:
-            pass
-        return HttpResponse(json)
 #新闻相关
 def newsMore(request,page=1):
     try:
@@ -89,7 +55,7 @@ def newsMore(request,page=1):
                 "panation":panations,
                 "lastPage":pages,
                 "curPage":page}
-    return render_to_response(r'news/news_more.html',pagedict,context_instance=RequestContext(request))
+    return render_to_response(r'news'+os.path.sep+'news_more.html',pagedict,context_instance=RequestContext(request))
 def newDetail(request, offset):
     try:
         offset = int(offset)
@@ -110,7 +76,7 @@ def newDetail(request, offset):
         index = index +1
     comments = Comment.objects.filter(news = offset).order_by("-createTs").all()
     nav = urlMatch(request.path)
-    return render_to_response(r'news/newsdetail.html', {"news": news,"content":contentDict,"nav":nav,"comments":comments}, context_instance=RequestContext(request))
+    return render_to_response(r'news'+os.path.sep+'newsdetail.html', {"news": news,"content":contentDict,"nav":nav,"comments":comments}, context_instance=RequestContext(request))
 def readNews(request,id):
     try:
         id = int(id)

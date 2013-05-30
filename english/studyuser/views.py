@@ -1,6 +1,6 @@
 # Create your views here.
 # --*-- coding:utf-8 --*--
-import datetime
+import datetime,os
 from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 
@@ -37,7 +37,7 @@ def logout(request):
         return HttpResponse(json)
 #注册前信息查询
 def RegPre(request):
-    return render_to_response(r'studyuser\regist.html',context_instance=RequestContext(request))
+    return render_to_response(r'studyuser'+os.path.sep+'regist.html',context_instance=RequestContext(request))
 def Reg(request):
     user = StudyUser();
     user.passwords =  request.POST['password'];

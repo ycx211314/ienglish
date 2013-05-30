@@ -1,10 +1,11 @@
 # --*-- coding:utf-8 --*--
 import datetime
-import uuid
+import uuid,os
 from django.core.files.base import ContentFile
 from english.news.models import News
 from english.util.newsParser import F21stParse
-
+if 'SERVER_SOFTWARE' in os.environ:
+    import sae.storage
 __author__ = 'Administrator'
 import urllib2
 import re
@@ -30,6 +31,9 @@ class ReadNewsFrom21():
     def feedMsg(self):
         if not self.flag:
             return
+            # 初始化一个Storage客户端。
+        if 'SERVER_SOFTWARE' in os.environ:
+            s = sae.storage.Client()
         for sub_url in self.extract_url():
             newsParser = F21stParse()
             if str(sub_url).find(self.baseUrl) == -1:
@@ -51,5 +55,11 @@ class ReadNewsFrom21():
                 news.contentEnglish = news.contentEnglish +"###"+ cont
             news.comeFrom = newsParser.author[1]
             news.introduce = newsParser.introduction
-            news.imageShow.save(str(uuid.uuid1())+".jpg",ContentFile(urllib2.urlopen(self.rootUrl+newsParser.imageUrl).read()));
+            if 'SERVER_SOFTWARE' in os.environ:
+                ob = sae.storage.Object(urllib2.urlopen(self.rootUrl+newsParser.imageUrl).read(),content_type='image/jpeg')
+                imgName = str(uuid.uuid1())+".jpg"
+                s.put('english',imgName, ob)
+                news.imageShow.name = imgName
+            else:
+                news.imageShow.save(str(uuid.uuid1())+".jpg",ContentFile(urllib2.urlopen(self.rootUrl+newsParser.imageUrl).read()))
             news.save()
