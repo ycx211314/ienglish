@@ -8,6 +8,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from english.news.encoder import getJson
 from english.studyuser.models import StudyUser
+import re
 #用户登录
 def login(request):
     if request.method == 'POST':
@@ -36,26 +37,39 @@ def logout(request):
             pass
         return HttpResponse(json)
 #注册前信息查询
-def RegPre(request):
+def regPre(request):
     return render_to_response(r'studyuser'+os.path.sep+'regist.html',context_instance=RequestContext(request))
-def Reg(request):
-    user = StudyUser();
-    user.passwords =  request.POST['password'];
-    user.userName =  request.POST['userName'];
-    user.email = request.POST['email'];
-    user.nickName = request.POST['nickName'];
-    #user.photo = request.POST['photo']
-    user.thirdType = 1
-    user.thirdId = '1';
-    user.third = '1';
-    user.thirdScrite = '1';
-    user.regDate = datetime.datetime.now().strftime('%Y-%m-%d')
-    try:
-        StudyUser.save(user);
-    except RuntimeError:
-        return render_to_response(r'forward.html',{"alertMessage":"注册失败，请重新注册","redirectUrl":"/index/"});
-    return render_to_response(r'forward.html',{"alertMessage":"注册成功","redirectUrl":"/index/"});
-
+#注册操作
+def reg(request):
+    if request.method == 'POST':
+        user = StudyUser();
+        try:
+            user.passwords =  request.POST['password'];
+            user.userName =  request.POST['userName'];
+            user.email = request.POST['email'];
+            user.nickName = request.POST['nickName'];
+            user.regDate = datetime.datetime.now().strftime('%Y-%m-%d')
+            if len(user.email) < 1:
+                raise  Exception(' 邮箱不合法');
+            if len(user.nickName) < 1 or len(user.nickName) > 50:
+                raise  Exception(' 昵称长度不合法');
+            if len(user.passwords) < 6 or len(user.passwords) > 32:
+                raise  Exception(' 密码长度不合法');
+            if len(user.userName) < 6 or len(user.userName) > 50:
+                raise  Exception(' 用户名长度不合法');
+            tempuser= StudyUser.objects.filter(userName=user.userName)
+            if len(tempuser) > 0:
+                raise Exception('用户名已被使用')
+            user.thirdType = 1
+            user.thirdId = '1';
+            user.third = '1';
+            user.thirdScrite = '1';
+            StudyUser.save(user);
+        except Exception , e:
+            return render_to_response(r'forward.html',{"alertMessage":"注册失败:"+e.message,"redirectUrl":r"/user/registerpre/"});
+        return render_to_response(r'forward.html',{"alertMessage":"注册成功！","redirectUrl":"/index/"});
+    else:
+        return render_to_response(r'forward.html',{"alertMessage":"哥们别逗了，正经注册去~~！","redirectUrl": r"/user/registerpre/"});                                                                               q
 def userExsit(request,name):
     try:
         username = name
