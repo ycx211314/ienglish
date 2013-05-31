@@ -18,7 +18,11 @@
             });
             setTimeout(function () {
                 var news = new English.Common.News({{ news.id }});
-                news.readNews()
+                var share = 0;
+                if ($("#").html() != $(".shareCount")[0].innerHTML){
+                    share = $(".shareCount")[0].innerHTML / 1;
+                }
+                news.readNews(share)
             }, 3000);
             $(".translate").bind("click", function () {
                 switch ($(this).attr("data-target")) {
@@ -42,21 +46,9 @@
         })
     </script>
     <style>
-        .tooltip-inner {
-            background-color: #DBEAF9;
-            border-radius: 4px 4px 4px 4px;
-            color: #000000;
-            max-width: 500px;
-            padding: 8px;
-            margin: 0px auto;
-            font-size: 12px;
-            text-align: left;
-            text-decoration: none;
-        }
-
-        .tooltip.in {
-            opacity: 100;
-        }
+    .dds{
+        color: #000000;
+    }
     </style>
 {% endblock %}
 {% block content_detail %}
@@ -74,7 +66,7 @@
         </div>
         <div class="span12">
             <label class="span9">日期：{{ news.createDate|date:'Y-m-d' }}　　{{ news.comeFrom }}　　阅读量：{{ news.readCount }}</label>
-
+            <label id="newsShare" style="display:none;">{{ news.shareCount }}</label>
             <div class="span3" style="text-align: right;">
                 <div class="btn-group" data-toggle="buttons-radio">
                     <button class="btn btn-mini btn-info translate" data-target='CH'>中</button>
@@ -107,75 +99,73 @@
                 </div>
             </div>
             <div class="span9">
-                <div class="span12">
+                <div class="span12 dds">
                     {% for cont in content %}
                         {{ cont|safe }}
                     {% endfor %}
-                    <hr>
-                    <!-- Baidu Button BEGIN -->
-                    <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
-                        <a class="bds_tsina"></a>
-                        <a class="bds_qzone"></a>
-                        <a class="bds_tqq"></a>
-                        <a class="bds_renren"></a>
-                        <a class="bds_t163"></a>
-                        <a class="bds_kaixin001"></a>
-                        <a class="bds_ty"></a>
-                        <a class="bds_copy"></a>
-                        <span class="bds_more"></span>
-                        <a class="shareCount"></a>
-                    </div>
-                    <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=6714511" ></script>
-                    <script type="text/javascript" id="bdshell_js"></script>
-                    <script type="text/javascript">
-                        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
-                    </script>
-                    <!-- Baidu Button END -->
                 </div>
+            </div>
+        <div class="span12">
+            <hr>
+            <!-- Baidu Button BEGIN -->
+            <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+                <a class="bds_tsina"></a>
+                <a class="bds_qzone"></a>
+                <a class="bds_tqq"></a>
+                <a class="bds_renren"></a>
+                <a class="bds_t163"></a>
+                <a class="bds_kaixin001"></a>
+                <a class="bds_ty"></a>
+                <a class="bds_copy"></a>
+                <span class="bds_more"></span>
+                <a class="shareCount"></a>
+            </div>
+            <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=6714511" ></script>
+            <script type="text/javascript" id="bdshell_js"></script>
+            <script type="text/javascript">
+                document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+            </script>
+            <!-- Baidu Button END -->
+        </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
                 <div class="row-fluid">
-
                     <div class="span12">
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <h6>评论</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span12 well">
-                        {% for com in comments %}
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="span2" style="text-align: center;">
-                                        <img src="/upload/{{ com.user.photo }}" class="img-polaroid"
-                                             style="height: 64px;"/>
-                                    </div>
-                                    <div class="span10">
-                                        <label>{{ com.user.nickName }} [{{ com.createTs|date:"Y-m-d H:m:s" }}]</label>
-                                        {{ com.message }}
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                        {% endfor %}
-                        <div class="row-fluid">
-                            <form method="post" action="/news/comment/add/">
-                                <div class="span12">
-                                    <textarea style="width:100%;" name="comment"></textarea>
-                                    <input type="hidden" name="newsId" value="{{ news.id }}">
-                                    {% csrf_token %}
-                                </div>
-                                <div class="span12" style="text-align: right;">
-                                    <small class="span8">网友评论仅供网友表达个人看法，并不表明网站同意其观点或证实其描述</small>
-                                    <button class="btn btn-info">发表</button>
-                                </div>
-                            </form>
-                        </div>
+                        <h6>评论</h6>
                     </div>
                 </div>
             </div>
+            <div class="span12 well">
+                {% for com in comments %}
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="span2" style="text-align: center;">
+                                <img src="/upload/{{ com.user.photo }}" class="img-polaroid"
+                                     style="height: 64px;"/>
+                            </div>
+                            <div class="span10">
+                                <label>{{ com.user.nickName }} [{{ com.createTs|date:"Y-m-d H:m:s" }}]</label>
+                                {{ com.message }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+                <div class="row-fluid">
+                    <form method="post" action="/news/comment/add/">
+                        <div class="span12">
+                            <textarea style="width:100%;" name="comment"></textarea>
+                            <input type="hidden" name="newsId" value="{{ news.id }}">
+                            {% csrf_token %}
+                        </div>
+                        <div class="span12" style="text-align: right;">
+                            <small class="span8">网友评论仅供网友表达个人看法，并不表明网站同意其观点或证实其描述</small>
+                            <button class="btn btn-info">发表</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <script type="text/javascript" charset="utf-8" src="/static/share.js"></script>
-        {#                    <script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/button.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script>#}
-        <script type="text/javascript" charset="utf-8" src="/static/shareCO.js"></script>
     {% endspaceless %}
 {% endblock %}

@@ -22,6 +22,17 @@ class ShortArticel(Resource):
         verbose_name = '精美短文'
         verbose_name_plural = "精美短文"
     pass
+class BusinessEssay(Resource):
+    shareCount = models.IntegerField(default=0)
+    content = models.TextField()
+    category = models.CharField(max_length=100)
+    tag = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.displayName
+    class Meta:
+        get_latest_by = "-createDate"
+        verbose_name = '商务英语'
+        verbose_name_plural = "商务英语"
 #class Video(Resource):
 #    pass
 #class Audio(Resource):
