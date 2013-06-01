@@ -3,9 +3,9 @@ import re
 
 __author__ = 'Administrator'
 urlConfigs = {
-    r"^/$": 1,
-    r"/news/\.?": 2,
-    r"/read/\.?": 3,
+    r"^/$":1,
+    r"/news/\.?":2,
+    r"/read/\.?":3,
     }
 class Nav:
     def __init__(self):
@@ -14,7 +14,7 @@ class Nav:
     pass
 def urlMatch(path):
     nav = Nav()
-    for key, value in urlConfigs.iteritems():
+    for key,value in urlConfigs.iteritems():
         pattern = re.compile(key)
         if pattern.match(path):
             nav.navTop = value

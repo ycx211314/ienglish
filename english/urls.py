@@ -17,7 +17,10 @@ urlpatterns = patterns('',
     url(r"^news/",include('english.news.urls')),
     #用户相关
     url(r"^user/",include('english.studyuser.urls')),
+    #资料相关
     url(r"^read/",include('english.article.urls')),
+    #视频相关
+    url(r"^video/",include('english.video.urls')),
     #首先相关
     url(r'^index/$',index),
     url(r'^$',index),
