@@ -1,0 +1,74 @@
+{% extends "base_content.html" %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block otherres %}
+{% endblock %}
+{% block content_detail %}
+    <div class="span12">
+        <ul class="breadcrumb bg_white">
+            <li><a href="/">首页</a> <span class="divider">&gt;</span></li>
+            <li><a href="/read/">公开课</a> <span class="divider">&gt;</span></li>
+            <li><a href="/read/english/">{{ course.topCategory}}</a> <span class="divider">&gt;</span></li>
+            <li><a href="/read/english/">{{ course.category}}</a> <span class="divider">&gt;</span></li>
+            <li class="active">{{ course.title }}</li>
+        </ul>
+    </div>
+    <div class="span12">
+        <div class="span12 well" style="height: 300px;padding: 10px;">
+            <div class="span5">
+                <img src="/upload/{{ course.largeImage }}"/>
+            </div>
+            <div class="span7" style="padding-right: 20px;">
+                    <h3>{{ course.title }}</h3>
+                    <p>{{ course.introduce }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="span12">
+        <div class="row-fluid">
+            <div class="span8">
+                <h4>课程列表</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>名称</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cx in detail %}
+                            <tr>
+                                <td>{{ cx.title }}</td>
+                                <td><i class="icon-screenshot"></i></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        <div class="span4">
+            <div class="span12">
+                <h5>讲师介绍</h5>
+                <img src="/upload/{{ course.teacherPhoto }}" />
+                <p>
+                    {{ course.teacher }}
+                </p>
+            </div>
+            <hr class="span12">
+            <div class="span12">
+                <h5>学院介绍</h5>
+                <p>{{ course.schoolName }}</p>
+            </div>
+        </div>
+        </div>
+    </div>
+{% spaceless %}
+    <div class="span12">
+        <div class="span12">
+            <p class="english"> </p>
+        </div>
+        <hr>
+        <div class="row-fluid">
+            <div class="span12">评论</div>
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock %}

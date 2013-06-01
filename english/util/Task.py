@@ -17,6 +17,9 @@ class BusinessTask(Thread):
     def run(self):
         feedBusiness()
         #business300()
+class CourseTask(Thread):
+    def run(self):
+        course()
 #s = sched.scheduler(time.time, time.sleep)
 #
 #class Job(Thread):
