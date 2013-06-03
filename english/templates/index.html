@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "common/base.html" %}
 {% block title %}英语资料网{% endblock %}
 {% block otherres %}
     <script type="text/javascript" src="/static/js/jquery.form.js"></script>
     <script type="text/javascript" src="/static/js/audio/audio.min.js"></script>
-    <script type="text/javascript" src="/static/js/index.js"></script>
+    <script type="text/javascript" src="/static/js/main.js"></script>
     <script type="text/javascript">
         $(function () {
             {% if request.session.loginFlag %}
@@ -18,7 +18,7 @@
                 $("#angle").attr("class", "icon-angle-down");
             }).on("show", function () {
                         $("#angle").attr("class", "icon-angle-up");
-            })
+                    })
         })
         audiojs.events.ready(function () {
             var as = audiojs.createAll();
@@ -52,7 +52,7 @@
 
     </div>
     <div class="row-fluid">
-        <div class="span8">
+        <div class="span6">
             <div id="myCarousel" class="carousel slide div">
                 <ol class="carousel-indicators">
                     {% for ns in news %}
@@ -71,6 +71,7 @@
                         {% if forloop.first %}
                             <div class="active item">
                                 <img src="/upload/{{ ns.imageShow }}" style="height: 220px;width: 100%;">
+
                                 <div style="height:30px;color: #fff;background: none repeat scroll 0 0 #222222;">
                                     <a href="/news/detail/{{ ns.id }}"><strong>{{ ns.title }}</strong></a>
                                 </div>
@@ -91,7 +92,7 @@
                 <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>
         </div>
-        <div class="span4">
+        <div class="span6">
             <div class="div">
                 <ul class="nav nav-tabs" style="font-size: 12px;">
                     <li class="active"><a href="#words" data-toggle="tab">每日一词</a></li>
@@ -154,7 +155,9 @@
     <!-- 双语新闻-->
     <div class="row-fluid">
         <div class="span12" id="doubleNews">
-            <h4 class="span12 topicHead">双语新闻 WORLD</h4>
+            <h4 class="span12 topicHead"><span class="span10"
+                                               style="line-height: 30px;">双语新闻 English&Chinese News</span> <a
+                    CLASS=" span2 text-right" style="color: #fff;" href="/news/">more &gt;&gt; </a></h4>
 
             <div class="row" style="margin-left: 0px;">
                 {% for ns in news %}
@@ -183,9 +186,9 @@
                 <div class="span4">
                     <h3>24小时热门</h3>
                     <ul class="nav nav-list">
-                    {% for ns in news %}
+                        {% for ns in news %}
                             <li><a href="/news/detail/{{ ns.id }}/">{{ ns.title }}</a></li>
-                    {% endfor %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -193,13 +196,18 @@
     </div>
     <div class="row-fluid">
         <div class="span12" id="hotRes">
-            <h4 class="span12 topicHead">热门资源 WORLD</h4>
+            <h4 class="span12 topicHead"><span class="span10"
+                                               style="line-height: 30px;">阅读资料 Read</span> <a
+                    CLASS=" span2 text-right" style="color: #fff;" href="/read/">more &gt;&gt; </a></h4>
+
             <div class="row-fluid" style="margin-left: 0px;">
                 <div class="span4 well">
                     <h3>精美短文</h3>
                     <ul class="nav nav-list">
                         {% for art in article %}
-                            <li><a href="/read/article/detail/{{ art.id }}/"><small>{{ art.displayName}}</small></a></li>
+                            <li><a href="/read/article/detail/{{ art.id }}/">
+                                <small>{{ art.displayName }}</small>
+                            </a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -207,7 +215,9 @@
                     <h3>热门文章</h3>
                     <ul class="nav nav-list">
                         {% for art in business %}
-                            <li><a href="/read/english/detail/{{ art.id }}/"><small>【{{ art.category }}】{{ art.displayName}}</small></a></li>
+                            <li><a href="/read/english/detail/{{ art.id }}/">
+                                <small>【{{ art.category }}】{{ art.displayName }}</small>
+                            </a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -219,14 +229,18 @@
     </div>
     <div class="row-fluid">
         <div class="span12" id="hotVideo">
-            <h4 class="span12 topicHead">热门影视 WORLD</h4>
+            <h4 class="span12 topicHead"><span class="span10"
+                                               style="line-height: 30px;">影视英语 Video</span> <a
+                    CLASS=" span2 text-right" style="color: #fff;" href="/video/">more &gt;&gt; </a></h4>
 
             <div class="row-fluid" style="margin-left: 0px;">
                 <div class="span4 well">
                     <h4>热播公开课</h4>
                     <ul class="nav nav-list">
                         {% for art in course %}
-                            <li><a href="/video/open/detail/{{ art.id }}/"><small>{{ art.title}}</small></a></li>
+                            <li><a href="/video/open/detail/{{ art.id }}/">
+                                <small>{{ art.title }}</small>
+                            </a></li>
                         {% endfor %}
                     </ul>
                 </div>

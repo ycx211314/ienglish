@@ -1,4 +1,3 @@
-# Create your views here.
 # --*-- coding:utf-8 --*--
 import datetime,os
 from django.http import Http404, HttpResponse
@@ -11,7 +10,6 @@ from english.news.models import News, Comment
 
 #进入首页
 from english.urlConfig import urlMatch
-from english.util.Task import NewsTask, ArticleTask
 #新闻相关
 def newsMore(request,page=1):
     try:
@@ -89,10 +87,11 @@ def readNews(request,id):
             share = 0
     updateVo = News.objects.get(id=id)
     count = updateVo.readCount + 1
+    commentCount = len(updateVo.comment_set.all())
     if share != 0:
-        News.objects.filter(id=id).update(readCount = count,shareCount=share)
+        News.objects.filter(id=id).update(readCount = count,shareCount=share,commentCount = commentCount )
     else:
-        News.objects.filter(id=id).update(readCount = count)
+        News.objects.filter(id=id).update(readCount = count,commentCount = commentCount )
     json = getJson({'flag':'ok'})
     return HttpResponse(json)
 
@@ -102,6 +101,8 @@ def addCommont(request):
         comment = Comment()
         comment.message =  request.POST['comment']
         comment.user = request.session['login']
+        comment.ipAddr = request.POST['ip']
+        comment.ipName = request.POST['ipname']
         comment.news = News.objects.get(id=newId)
         comment.createTs = datetime.datetime.now()
         comment.save()
@@ -109,11 +110,45 @@ def addCommont(request):
     else:
         json = getJson({'flag':'no'})
     return HttpResponse(json)
-def TaskStart(request,comand):
-    if comand and str(comand) == "start":
-        task = NewsTask()
-        task.start()
-    if comand and str(comand) == "art":
-        task = ArticleTask()
-        task.start()
-    return HttpResponse("/admin/login/")
+def showComment(request,newsId,page=1):
+    pageSize = 5
+    try:
+        id = int(newsId)
+        page = int(page)
+    except:
+        return Http404()
+    news = News.objects.get(id=id)
+    commonts =news.comment_set.order_by("-createTs").all()
+    total = len(commonts)
+    st = (page -1) * pageSize
+    ed = page * pageSize
+    if total % pageSize == 0:
+        pages = total / pageSize
+    else:
+        pages = int((total + pageSize) / pageSize)
+    panations = []
+    if page > 1:
+        panations.append(page-1)
+    else:
+        panations.append(1)
+    if page < 5:
+        for x in range(1,11):
+            panations.append(x)
+            if x >=  pages:
+                break
+    else:
+        for x in range(page - 1,page - 1 + 10):
+            panations.append(x)
+            if x > pages:
+                break
+    if page+1 > pages:
+        panations.append(page)
+    else:
+        panations.append(page+1)
+    nav = urlMatch(request.path)
+    return  render_to_response(r'news'+os.path.sep+'comment.html',{"comments":commonts[st:ed],
+                                                                   'news':news,
+                                                                   "nav":nav,
+                                                                   "curPage":page,
+                                                                   "lastPage":pages,
+                                                                   "panation":panations},context_instance=RequestContext(request))

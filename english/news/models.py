@@ -13,6 +13,7 @@ class News(models.Model):
     shareCount = models.IntegerField(verbose_name="分享数量",default=0)
     comeFrom = models.CharField(max_length=200,verbose_name="来源")
     imageShow = models.ImageField(verbose_name="插图",upload_to="newsImg")
+    commentCount = models.IntegerField(verbose_name="评论数",default=0)
     lastUpdateFlag = models.IntegerField(default=0)
     createDate = models.DateTimeField()
     class Meta:
@@ -31,4 +32,8 @@ class Comment(models.Model):
     user = models.ForeignKey("studyuser.StudyUser")
     message = models.CharField(max_length=200)
     news = models.ForeignKey('News')
+    ipAddr = models.CharField(max_length=20)
+    ipName = models.CharField(max_length=50)
+    agreeWith = models.IntegerField(default=0)
+    followPid = models.ForeignKey('self',null = True, blank = True)
     createTs = models.DateTimeField()
