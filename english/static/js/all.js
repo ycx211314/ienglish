@@ -1,3 +1,6 @@
+String.prototype.trim = function () {
+    return this .replace(/^\s\s*/, '' ).replace(/\s\s*$/, '' );
+}
 Namespace = new Object();
 Namespace.register = function (fullNS) {
     var nsArray = fullNS.split('.');

@@ -4,4 +4,4 @@ from django.contrib import admin
 from english.article.models import *
 
 admin.site.register(ShortArticel)
-admin.site.register(BusinessEssay)
+#admin.site.register(BusinessEssay)

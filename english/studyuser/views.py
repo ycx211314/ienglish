@@ -42,21 +42,28 @@ def regPre(request):
 #注册操作
 def reg(request):
     if request.method == 'POST':
-        user = StudyUser();
         try:
+           referer = request.META['HTTP_REFERER']
+           rightreferer = r'http://' + request.META['HTTP_HOST'] + r'/user/registerpre/'
+           if referer != rightreferer:
+               return render_to_response(r'forward.html',{"alertMessage":"请到我们的网站进行注册，谢谢~~！","redirectUrl": r"/user/registerpre/"});
+        except:
+            return render_to_response(r'forward.html',{"alertMessage":"请到我们的网站进行注册，谢谢~~！","redirectUrl": r"/user/registerpre/"});
+        try:
+            user = StudyUser();
             user.passwords =  request.POST['password'];
             user.userName =  request.POST['userName'];
             user.email = request.POST['email'];
             user.nickName = request.POST['nickName'];
             user.regDate = datetime.datetime.now().strftime('%Y-%m-%d')
-            if len(user.email) < 1:
-                raise  Exception(' 邮箱不合法');
+            if len(user.userName) < 6 or len(user.userName) > 50:
+                raise  Exception(' 用户名长度不合法');
             if len(user.nickName) < 1 or len(user.nickName) > 50:
                 raise  Exception(' 昵称长度不合法');
             if len(user.passwords) < 6 or len(user.passwords) > 32:
                 raise  Exception(' 密码长度不合法');
-            if len(user.userName) < 6 or len(user.userName) > 50:
-                raise  Exception(' 用户名长度不合法');
+            if len(user.email) < 1:
+                raise  Exception(' 邮箱不合法');
             tempuser= StudyUser.objects.filter(userName=user.userName)
             if len(tempuser) > 0:
                 raise Exception('用户名已被使用')
@@ -69,7 +76,7 @@ def reg(request):
             return render_to_response(r'forward.html',{"alertMessage":"注册失败:"+e.message,"redirectUrl":r"/user/registerpre/"});
         return render_to_response(r'forward.html',{"alertMessage":"注册成功！","redirectUrl":"/index/"});
     else:
-        return render_to_response(r'forward.html',{"alertMessage":"哥们别逗了，正经注册去~~！","redirectUrl": r"/user/registerpre/"});                                                                               q
+        return render_to_response(r'forward.html',{"alertMessage":"您的表单提交有问题，请正确提交表单~~！","redirectUrl": r"/user/registerpre/"});                                                                               q
 def userExsit(request,name):
     try:
         username = name

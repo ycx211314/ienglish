@@ -10,7 +10,7 @@
             });
         });
     function formSubmit(){
-        console.debug($("#regForm input"));
+        //console.debug($("#regForm input"));
         return false;
     }
     function uploadPhoto(){
@@ -46,7 +46,7 @@
             <h4>学员注册</h4>
             <hr>
         </div>
-            <form class="form-horizontal row-fluid" method="post" action="/user/register/" id="regForm" onsubmit="formSubmit();">
+            <form class="form-horizontal row-fluid" method="post" action="/user/register/" id="regForm" onsubmit="return formSubmit();">
                 <div class="span12">
                     {% csrf_token %}
                     <div class="control-group">
