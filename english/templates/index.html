@@ -50,7 +50,7 @@
         <div class="span6">
             <div id="myCarousel" class="carousel slide div">
                 <ol class="carousel-indicators">
-                    {% for ns in news %}
+                    {% for ns in carNews %}
                         {% if forloop.first %}
                             <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}"
                                 class="active">{{ forloop.counter0 }}</li>
@@ -62,11 +62,14 @@
                 </ol>
                 <!-- Carousel items -->
                 <div class="carousel-inner">
-                    {% for ns in news %}
+                    {% for ns in carNews %}
                         {% if forloop.first %}
                             <div class="active item">
-                                <img src="/upload/{{ ns.imageShow }}" style="height: 220px;width: 100%;">
-
+                                {% for x in ns.newsres_set.all %}
+                                    {% if forloop.first %}
+                                        <img src="/upload/{{ x.resUrl}}" style="height: 220px;width: 100%;">
+                                    {% endif %}
+                                {% endfor %}
                                 <div style="height:30px;color: #fff;background: none repeat scroll 0 0 #222222;">
                                     <a href="/news/detail/{{ ns.id }}"><strong>{{ ns.title }}</strong></a>
                                 </div>
@@ -189,7 +192,7 @@
                 <div class="span4">
                     <h3>24小时热门</h3>
                     <ul class="nav nav-list">
-                        {% for ns in news %}
+                        {% for ns in hotNews %}
                             <li><a href="/news/detail/{{ ns.id }}/">{{ ns.title }}</a></li>
                         {% endfor %}
                     </ul>

@@ -6,6 +6,8 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     url(r'^(\d+)/$',view.newsMore),
     url(r'^$',view.newsMore),
+    url(r"^type/(\w+)/$",view.newsTypeMore),
+    url(r"^type/(\w+)/(\d+)/$",view.newsTypeMore),
     url(r'^detail/(\d+)/$',view.newDetail),
     url(r"^read/(\d+)/$",view.readNews),
     url(r'^comment/add/$',view.addCommont),

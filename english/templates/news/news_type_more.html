@@ -6,6 +6,7 @@
             <ul class="breadcrumb bg_white">
                 <li><a href="/">首页</a> <span class="divider">&gt;</span></li>
                 <li><a href="/news/">双语新闻</a> <span class="divider">&gt;</span></li>
+                <li><a href="/news/{{ curCate.typeUrl }}/">{{ curCate.typeName }}</a> <span class="divider">&gt;</span></li>
                 <li class="active">新闻列表</li>
             </ul>
         </div>
@@ -16,9 +17,14 @@
                 <ul class="nav nav-pills">
                     {% for link in category %}
                         {% if forloop.first %}
-                            <li class="active"><a href="/news/">全部</a></li>
+                            <li><a href="/news/">全部</a></li>
                         {% endif %}
-                        <li><a href="/news/type/{{ link.typeUrl }}/">{{ link.typeName }}</a></li>
+                        {% if link.id == curCate.id %}
+                            <li class="active"><a href="/news/type/{{ link.typeUrl }}/">{{ link.typeName }}</a></li>
+                        {% else %}
+                            <li><a href="/news/type/{{ link.typeUrl }}/">{{ link.typeName }}</a></li>
+                        {% endif %}
+
                     {% endfor %}
                 </ul>
             </div>
@@ -54,7 +60,7 @@
                                     <i class="icon-share"></i>
                                     分享（{{ news.shareCount }}）
                                 </a>
-                                <a href="/news/comment/{{ news.id }}/" class="span3 text-right">
+                                <a href="#" class="span3 text-right">
                                     <i class="icon-comment"></i>
                                     评论（{{ news.commentCount }}）
                                 </a>

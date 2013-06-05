@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 #跳转到主页
 from django.template import RequestContext
 from english.news.encoder import getJson
-from english.news.models import News, Comment
+from english.news.models import News, Comment, NewsCategory
 
 #进入首页
 from english.urlConfig import urlMatch
@@ -19,7 +19,8 @@ def newsMore(request,page=1):
         raise Http404()
     st = (page -1) * 10
     ed = page * 10
-    newsall = News.objects.all()
+    newsall = News.objects.order_by("-createDate").all()
+    category = NewsCategory.objects.order_by("typeOrder").all();
     topNews = News.objects.order_by("-readCount").all()[0:10]
     topShare = newsall.order_by("-shareCount")[0:10]
     total = len(newsall)
@@ -50,10 +51,63 @@ def newsMore(request,page=1):
     pagedict = {"newses":newsall[st:ed],
                 "topNews": topNews,
                 "topShare":topShare,
+                'category':category,
                 "panation":panations,
                 "lastPage":pages,
                 "curPage":page}
     return render(r'news'+os.path.sep+'news_more.html',pagedict,request)
+def newsTypeMore(request,type,page=1):
+    try:
+        page = int(page)
+        typeStr = str(type)
+    except ValueError:
+        raise Http404()
+    except Exception:
+        raise Http404()
+    st = (page -1) * 10
+    ed = page * 10
+    curCate = NewsCategory.objects.get(typeUrl=typeStr)
+    category = NewsCategory.objects.order_by("typeOrder").all();
+    if not curCate:
+        raise Http404()
+    else:
+        newsall = curCate.news_set.order_by("-createDate").all()
+    topNews = News.objects.order_by("-readCount").all()[0:10]
+    topShare = newsall.order_by("-shareCount")[0:10]
+    total = len(newsall)
+    if total % 10 == 0:
+        pages = total / 10
+    else:
+        pages = int((total + 10) / 10)
+    panations = []
+    if page > 1:
+        panations.append(page-1)
+    else:
+        panations.append(1)
+    if page < 5:
+        for x in range(1,11):
+            panations.append(x)
+            if x >=  pages:
+                break
+    else:
+        for x in range(page - 1,page - 1 + 10):
+            panations.append(x)
+            if x > pages:
+                break
+    if page+1 > pages:
+        panations.append(page)
+    else:
+        panations.append(page+1)
+    nav = urlMatch(request.path)
+    pagedict = {"newses":newsall[st:ed],
+                "topNews": topNews,
+                "topShare":topShare,
+                "curCate":curCate,
+                'category':category,
+                "panation":panations,
+                "lastPage":pages,
+                "curPage":page}
+    return render(r'news'+os.path.sep+'news_type_more.html',pagedict,request)
 def newDetail(request, offset):
     try:
         offset = int(offset)
