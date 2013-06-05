@@ -1,0 +1,23 @@
+<div class="pagination pagination-right pagination-mini" style="margin: 0px;">
+    <ul>
+        <li><a href="/news/"><!--<i class="icon-double-angle-left"></i> -->首页</a></li>
+        {% for x in panation %}
+            {% if forloop.first %}
+                <li><a href="/news/{{ x }}/"><!--<i class="icon-angle-left"></i> -->上一页</a></li>
+            {% elif forloop.last %}
+                <li><a href="/news/{{ x }}/"><!--<i class="icon-angle-right"></i> -->下一页</a></li>
+            {% else %}
+                {% if x == curPage %}
+                    <li class="active"><a href="/news/{{ x }}/">{{ x }}</a></li>
+                {% else %}
+                    <li><a href="/news/{{ x }}/">{{ x }}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <li><a href="/news/{{ lastPage }}/"><!--<i class="icon-double-angle-right"></i> -->尾页</a></li>
+    </ul>
+    <div style="height: 20px;float: right">
+        <input type="text" value="{{curPage}}" style="width:22px;height:18px;padding: 0px;margin: 0px;text-align: center"> /<span style="line-height: 20px;font-weight: bolder;"> {{ lastPage }} </span>
+        <a class="badge" href="#">Go</a>
+    </div>
+</div>

@@ -2,12 +2,12 @@
 # --*-- coding:utf-8 --*--
 import datetime
 from django.http import Http404, HttpResponse
-from django.shortcuts import render_to_response
 
 #跳转到主页
 from django.template import RequestContext
 from english.article.models import *
 from english.news.models import News
+from english.util.decorator.webDecorator import render
 from english.video.models import *
 
 #进入首页
@@ -20,11 +20,10 @@ def index(request):
     businessArt = BusinessEssay.objects.order_by("-createDate").all()[:10]
     course = OpenCourse.objects.all()[0:10] #相关课程
     nav = urlMatch(request.path)
-    return render_to_response('index.html', {"news": news,
-                                             "nav":nav,
+    return render('index.html', {"news": news,
                                              "article":shortArticle,
                                              "course":course,
-                                             "business":businessArt}, context_instance=RequestContext(request))
+                                             "business":businessArt}, request)
 def TaskStart(request,comand):
     if comand and str(comand) == "start":
         task = NewsTask()

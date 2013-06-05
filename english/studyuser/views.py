@@ -23,6 +23,8 @@ def login(request):
                 request.session['loginFlag'] = True
                 request.session['login'] = stu
                 json = getJson({'login':stu,'flag':'ok'})
+            else:
+                json = getJson({"flag":"no"})
         else:
             json = getJson({'flag':'no'})
         return HttpResponse(json)
@@ -76,7 +78,7 @@ def reg(request):
             return render_to_response(r'forward.html',{"alertMessage":"注册失败:"+e.message,"redirectUrl":r"/user/registerpre/"});
         return render_to_response(r'forward.html',{"alertMessage":"注册成功！","redirectUrl":"/index/"});
     else:
-        return render_to_response(r'forward.html',{"alertMessage":"您的表单提交有问题，请正确提交表单~~！","redirectUrl": r"/user/registerpre/"});                                                                               q
+        return render_to_response(r'forward.html',{"alertMessage":"您的表单提交有问题，请正确提交表单~~！","redirectUrl": r"/user/registerpre/"});
 def userExsit(request,name):
     try:
         username = name

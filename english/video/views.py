@@ -22,3 +22,5 @@ def openCourse(request,cid):
         "nav":urlMatch(request.path),
     }
     return render_to_response(r'video'+os.path.sep+'openCourse.html',pagedict,context_instance=RequestContext(request))
+def moreVideo(request):
+    return render_to_response(r'video'+os.path.sep+'moreVideo.html',{},context_instance=RequestContext(request))

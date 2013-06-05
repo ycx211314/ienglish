@@ -69,6 +69,8 @@
     text-align: center;
     line-height: 30px;
     color: #FFF;
+    border-radius:2px;
+    padding: 0px 2px;
 }
 .leftBorder {
     border: 1px solid #E5E5E5;
@@ -76,4 +78,22 @@
 }
 .leftBorder * {
     border: 0px;
+}
+
+.topicHead a,.topicHead a:hover{
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.agreeWith{
+    padding:2px;
+    color: green;
+    background: #fff;
+}
+.commentList{
+    padding:2px;
+    font-size: 12px;
+    color: #F8B568;
+    background: #fff;
 }

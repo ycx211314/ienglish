@@ -9,6 +9,6 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter = ('createDate','hot',)
     date_hierarchy = 'createDate'
     ordering = ('-createDate',)
-    fields = ('title','titleEnglish','content','contentEnglish','hot','imageShow','comeFrom',)
+    fields = ('title','titleEnglish','content','contentEnglish','hot','comeFrom',)
     #filter_horizontal = ('title',)
 admin.site.register(News,NewsAdmin)

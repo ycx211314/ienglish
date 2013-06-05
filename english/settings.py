@@ -23,26 +23,26 @@ MANAGERS = ADMINS
 #    MYSQL_PASS = 'root'
 #    MYSQL_DB = 'app_pylabs'
 #
-#DATABASES = {
-#      'default': {
-#          'ENGINE': 'django.db.backends.mysql',
-#          'NAME': 'english',
-#          'USER': 'root',
-#          'PASSWORD': 'admin',
-#          'HOST': '127.0.0.1',
-#          'PORT': '3306',
-#          }
-#}
 DATABASES = {
-  'default': {
-      'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-      'NAME': 'english',                      # Or path to database file if using sqlite3.
-      'USER': 'english',                      # Not used with sqlite3.
-      'PASSWORD': '123456',                  # Not used with sqlite3.
-      'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
-      'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
-  }
+         'default': {
+             'ENGINE': 'django.db.backends.mysql',
+             'NAME': 'english',
+             'USER': 'root',
+             'PASSWORD': 'admin',
+             'HOST': '127.0.0.1',
+             'PORT': '3306',
+             }
 }
+#DATABASES = {
+#'default': {
+#   'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#   'NAME': 'english',                      # Or path to database file if using sqlite3.
+#   'USER': 'english',                      # Not used with sqlite3.
+#   'PASSWORD': '123456',                  # Not used with sqlite3.
+#   'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+#   'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
+#}
+#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
