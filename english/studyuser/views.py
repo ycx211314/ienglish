@@ -107,11 +107,13 @@ def wblogin(request):
         try:
             users=StudyUser.objects.filter(userName=user.userName);
             if len(users):
-                StudyUser.update(user)
+               # StudyUser.update(user)
+                pass
             else:
                 StudyUser.save(user)
             request.session['loginFlag'] = True
             request.session['login'] = user
-        except:
+        except Exception ,e:
+            print(e.message);
             return HttpResponse(getJson({"flag":"no"}))
         return HttpResponse(getJson({"flag":"yes"}))

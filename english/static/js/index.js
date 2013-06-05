@@ -56,6 +56,10 @@ function logout(){
              }
         }
     });
+    isLogin(false);
+    WB2.logout(function(){
+        alert('已退出!');
+    });
 }
 
 function wbdl(){
@@ -74,8 +78,7 @@ function wbdl(){
                         type:'post',
                         data:'uid='+uid+'&photo='+photo+'&nickName='+nickName+'&csrfmiddlewaretoken='+English.Common.cookieTool.getCsrftoken(),
                         success:function(value){
-                              alert('存好了。。。刷新页面吧');
-                            this.location=location;
+                            location='/index/'
                         },
                         error:function(){
                             alert('出问题了!!');
