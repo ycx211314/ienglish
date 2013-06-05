@@ -130,6 +130,8 @@ English.index.loginShow = function (flag) {
     }
 }
 English.index.loginOut = function () {
+    WB2.logout(function(){
+    });
     $.get("/user/logout/", {}, function () {
         location.reload()
     })
