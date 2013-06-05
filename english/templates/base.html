@@ -1,18 +1,22 @@
 <!DOCTYPE HTML>
 {% load staticfiles %}
-<html>
+<html xmlns:wb="http://open.weibo.com/wb">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
     <title>{% block title %}{% endblock %}</title>
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=526223522" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="/static/js/main.js"></script>
     <script type="text/javascript" src="/static/js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.json-2.4.min.js"></script>
-    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/application.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/all.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <script type="text/javascript" src="/static/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/static/js/index.js"></script>
     {% block otherres %}
     {% endblock %}
     <META NAME="Author" CONTENT="">
@@ -42,6 +46,7 @@
                         <li class="divider-vertical"></li>
                         <li {% ifequal 5 nav.navTop %}class="active" {% endifequal %}><a href="#">关于我们</a></li>
                         <!--木有登录 -->
+                        <!--
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cogs"></i><b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -56,6 +61,27 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        -->
+                        <li class="divider-vertical"></li>
+                        {% if  request.session.loginFlag %}
+                        <li >
+                            <a href="javascript:void(0);" >{{ request.session.login.nickName }}</a>
+                        </li>
+                         <!-- -->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cogs"></i><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:English.index.loginShow(true);">个人中心</a></li>
+                                    <li><a href="javascript:English.index.loginOut();">注销</a></li>
+                                </ul>
+                            </li>
+                         <!-- -->
+                        {% else %}
+                            <li>
+                                <a href="javascript:English.index.loginShow(true);">登录</a>
+                            </li>
+                            <li> <a href="/user/registerpre/"><span style="color:red;">注册</span></a></li>
+                        {% endif %}
                         <!-- end 木有登录-->
                         <!-- 登录成功 -->
 
@@ -117,12 +143,20 @@
                             <input type="checkbox"> 记住用户  <a href="#">忘记密码</a>
                         </label>
                     </div>
+
                 </div>
                 {% csrf_token %}
             </form>
+       <b> 第三方登录:</b><br>
+       <div style="margin-top:10px;text-align: left" id="other">
+             <a style="text-decoration: none;color:#000000;cursor:pointer;" href="javascript: WB2.login(wbdl);">
+                 <img src="/static/img/sinat.png" style="width:16px;height: 16px;" />&nbsp;新浪</a>&nbsp;&nbsp;
+           <span style="text-decoration: none;color:#000000;cursor:pointer;" id="a">
+               <img src="/static/img/qq.png"  />&nbsp;QQ</span>
+       </div>
     </div>
     <div class="modal-footer">
-        <a href="javascript:login(false)" class="btn btn-success">取　消</a>
+        <a href="javascript:English.index.loginShow(false);" class="btn btn-success">取　消</a>
         <input type="submit"class="btn btn-success" value="登　录" form="loginFm"/>
     </div>
 </div>

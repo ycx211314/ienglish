@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}学员注册{% endblock %}
 {% block otherres %}
+    <script type="text/javascript" src="/static/js/index.js"></script>
     <script type="text/javascript">
         $(function () {
             $(".controls>input[type='text']").val("");
@@ -10,7 +11,7 @@
             });
         });
     function formSubmit(){
-        //console.debug($("#regForm input"));
+        console.debug($("#regForm input"));
         return false;
     }
     function uploadPhoto(){
@@ -46,14 +47,14 @@
             <h4>学员注册</h4>
             <hr>
         </div>
-            <form class="form-horizontal row-fluid" method="post" action="/user/register/" id="regForm" onsubmit="return formSubmit();">
+            <form class="form-horizontal row-fluid" method="post" action="/user/register/" id="regForm" onsubmit="formSubmit();">
                 <div class="span12">
                     {% csrf_token %}
                     <div class="control-group">
                         <label class="control-label" for="userName">账号:</label>
                         <div class="controls">
                             <input class="input-xlarge" id="userName" name="userName"
-                                   type="text"   autofocus="true"
+                                   type="text"
                                    placeholder="账户必须是字母、数字、下划线组成，长度为6-30位之间！"
                                    required="true" pattern="^[0-9a-zA-Z_]{6,16}$"/>
                             <span class="help-inline"></span>

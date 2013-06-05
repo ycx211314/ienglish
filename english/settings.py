@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'english.studyuser',
     'english.commons',
     'english.article',
+    'english.video',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
