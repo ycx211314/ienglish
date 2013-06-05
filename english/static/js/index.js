@@ -24,24 +24,3 @@ function showResponse(responseText, statusText, xhr, $form)  {
 
     }
 }
-function isLogin(flag){
-    if(flag){
-        $("#userInfoDiv").show();
-        $("#loginDiv").hide();
-    }else{
-        $("#userInfoDiv").hide();
-        $("#loginDiv").show();
-    }
-}
-function logout(){
-    $.ajax({
-        url:'/user/logout/',
-        type:'GET',
-        dataType:"json",
-        success:function(data){
-             if(data.flag){
-                 isLogin(false);
-             }
-        }
-    });
-}

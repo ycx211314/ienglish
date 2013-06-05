@@ -1,7 +1,6 @@
 # --*-- coding:utf-8 --*--
 import datetime,os
 from django.http import Http404, HttpResponse
-from django.shortcuts import render_to_response
 
 #跳转到主页
 from django.template import RequestContext
@@ -11,6 +10,8 @@ from english.news.models import News, Comment
 #进入首页
 from english.urlConfig import urlMatch
 #新闻相关
+from english.util.decorator.webDecorator import render
+
 def newsMore(request,page=1):
     try:
         page = int(page)
@@ -49,19 +50,18 @@ def newsMore(request,page=1):
     pagedict = {"newses":newsall[st:ed],
                 "topNews": topNews,
                 "topShare":topShare,
-                "nav":nav,
                 "panation":panations,
                 "lastPage":pages,
                 "curPage":page}
-    return render_to_response(r'news'+os.path.sep+'news_more.html',pagedict,context_instance=RequestContext(request))
+    return render(r'news'+os.path.sep+'news_more.html',pagedict,request)
 def newDetail(request, offset):
     try:
         offset = int(offset)
     except ValueError:
         raise Http404()
     news = News.objects.get(id=offset)
-    contentEN = news.content.split("###")
-    contetnCH = news.contentEnglish.split("###")
+    contentEN = news.contentEnglish.split("|||")
+    contetnCH = news.content.split("|||")
     contentDict = []
     index = 0
     while index < len(contentEN):
@@ -74,7 +74,7 @@ def newDetail(request, offset):
         index = index +1
     comments = Comment.objects.filter(news = offset).order_by("-createTs").all()
     nav = urlMatch(request.path)
-    return render_to_response(r'news'+os.path.sep+'newsdetail.html', {"news": news,"content":contentDict,"nav":nav,"comments":comments}, context_instance=RequestContext(request))
+    return render(r'news'+os.path.sep+'newsdetail.html', {"news": news,"content":contentDict,"comments":comments,"newsRes":news.newsres_set.all()}, request)
 def readNews(request,id):
     try:
         id = int(id)
@@ -146,9 +146,23 @@ def showComment(request,newsId,page=1):
     else:
         panations.append(page+1)
     nav = urlMatch(request.path)
-    return  render_to_response(r'news'+os.path.sep+'comment.html',{"comments":commonts[st:ed],
+    return  render(r'news'+os.path.sep+'comment.html',{"comments":commonts[st:ed],
                                                                    'news':news,
-                                                                   "nav":nav,
                                                                    "curPage":page,
                                                                    "lastPage":pages,
-                                                                   "panation":panations},context_instance=RequestContext(request))
+                                                                   "panation":panations},request)
+def agreeWith(request):
+    """
+    评论赞同
+    """
+    res = {"flag":"no"}
+    if request.GET["comId"]:
+        try:
+            commentId = int(request.GET["comId"])
+        except:
+            res["flag"]="no"
+    comment = Comment.objects.get(id=commentId)
+    comment.agreeWith = comment.agreeWith + 1
+    comment.save()
+    res["flag"]="ok"
+    return HttpResponse(getJson(res))

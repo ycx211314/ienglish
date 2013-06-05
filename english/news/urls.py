@@ -11,5 +11,6 @@ urlpatterns = patterns('',
     url(r'^comment/add/$',view.addCommont),
     url(r"comment/(\d+)/$",view.showComment),
     url(r"comment/(\d+)/(\d+)/$",view.showComment),
+    url(r"comment/agree/up/$",view.agreeWith),
 )
 

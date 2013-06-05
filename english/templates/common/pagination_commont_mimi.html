@@ -1,11 +1,11 @@
 <div class="pagination pagination-left pagination-mini" style="margin: 0px;">
     <ul>
-        <li><a href="/news/comment/{{ news.id }}/"><i class="icon-fast-backward"></i></a></li>
+        <li><a href="/news/comment/{{ news.id }}/"><i class="icon-double-angle-left"></i></a></li>
         {% for x in panation %}
             {% if forloop.first %}
-                <li><a href="/news/comment/{{ news.id }}/{{ x }}/"><i class="icon-backward"></i></a></li>
+                <li><a href="/news/comment/{{ news.id }}/{{ x }}/"><i class="icon-angle-left"></i></a></li>
             {% elif forloop.last %}
-                <li><a href="/news/comment/{{ news.id }}/{{ x }}/"><i class="icon-forward"></i></a></li>
+                <li><a href="/news/comment/{{ news.id }}/{{ x }}/"><i class="icon-angle-right"></i></a></li>
             {% else %}
                 {% if x == curPage %}
                     <li class="active"><a href="/news/comment/{{ news.id }}/{{ x }}/">{{ x }}</a></li>
@@ -14,7 +14,7 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
-        <li><a href="/news/comment/{{ news.id }}/{{ lastPage }}/"><i class="icon-fast-forward"></i></a></li>
+        <li><a href="/news/comment/{{ news.id }}/{{ lastPage }}/"><i class="icon-double-angle-right"></i></a></li>
     </ul>
     <div style="height: 20px;float: right">
         <input type="text" value="{{curPage}}" style="width:22px;height:18px;padding: 0px;margin: 0px;text-align: center"> /<span style="line-height: 20px;font-weight: bolder;"> {{ lastPage }} </span>

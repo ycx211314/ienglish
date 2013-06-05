@@ -13,6 +13,7 @@
         <ul class="breadcrumb bg_white">
             <li><a href="/">首页</a> <span class="divider">&gt;</span></li>
             <li><a href="/news/">双语新闻</a> <span class="divider">&gt;</span></li>
+            <li><a href="/news/{{ news.categroy.typeUrl }}/">{{ news.categroy.typeName }}</a> <span class="divider">&gt;</span></li>
             <li class="active">{{ news.title }}</li>
         </ul>
     </div>
@@ -94,8 +95,9 @@
             </div>
             <div class="span3">
                 <div class="row-fluid">
-                    <img src="/upload/{{ news.imageShow }}" class="img-rounded span12"/>
-
+                    {% for img in newsRes %}
+                    <img src="/upload/{{ img.resUrl }}" class="img-rounded span12"/>
+                    {% endfor %}
                     <div class="span12">
                         <h4>相关阅读</h4>
                     </div>

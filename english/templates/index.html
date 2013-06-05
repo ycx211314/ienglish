@@ -6,11 +6,6 @@
     <script type="text/javascript" src="/static/js/main.js"></script>
     <script type="text/javascript">
         $(function () {
-            {% if request.session.loginFlag %}
-                isLogin(true);
-            {% else %}
-                isLogin(false);
-            {% endif %}
             $("#leftNav").affix({
                 offset: {x: 100, y: 0}
             })
@@ -78,8 +73,11 @@
                             </div>
                         {% else %}
                             <div class="item">
-                                <img src="/upload/{{ ns.imageShow }}" style="height: 220px;width: 100%;">
-
+                                {% for x in ns.newsres_set.all %}
+                                    {% if forloop.first %}
+                                    <img src="/upload/{{ x.resUrl}}" style="height: 220px;width: 100%;">
+                                    {% endif %}
+                                {% endfor %}
                                 <div style="height:30px;color: #fff;background: none repeat scroll 0 0 #222222;">
                                     <a href="/news/detail/{{ ns.id }}"><strong>{{ ns.title }}</strong></a>
                                 </div>
@@ -163,8 +161,13 @@
                 {% for ns in news %}
                     {% if forloop.first %}
                         <div class="span3 well">
-                            <div class="span12"><img src="/upload/{{ ns.imageShow }}" class="img-rounded"
-                                                     style="width: 180px;height: 185px;"></div>
+                            <div class="span12">
+                                {% for x in ns.newsres_set.all %}
+                                    {% if forloop.first %}
+                                        <img src="/upload/{{ x.resUrl}}" class="img-rounded" style="height: 150px;width: 100%;">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                             <div class="span12"><h6><a href="/news/detail/{{ ns.id }}/"> {{ ns.title }} </a></h6></div>
                             <div class="span12">
                                 <small>{{ ns.introduce }}</small>

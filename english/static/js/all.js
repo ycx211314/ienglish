@@ -47,6 +47,7 @@ English.Common.News = function (id) {
     this.id = id;
     this.readUrl = "/news/read/" + this.id + "/"
     this.commentUrl = "/news/comment/add/";
+    this.agreeUrl = "/news/comment/agree/"
 }
 English.Common.News.prototype = {
     newsDetailInit: function (newId) {
@@ -112,6 +113,12 @@ English.Common.News.prototype = {
             }
 
         })
+    },
+    agreeWithComment:function(comId){
+        $.get(this.agreeUrl+"up/",{"comId":comId});
+    },
+    noAgreeWithComment:function(comId){
+        $.get(this.agreeUrl+"down/",{"comId":comId});
     }
 }
 Namespace.register("English.index");

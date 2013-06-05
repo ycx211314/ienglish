@@ -4,11 +4,11 @@ import sched, time
 from threading import Thread, Timer
 from english.util.crawler.ArticleParse import ReadArticle
 from english.util.crawler.BusinessEssayParse import *
-from english.util.readNews import ReadNewsFrom21
+from english.util.readNews import readNewsFromText
+
 class NewsTask(Thread):
     def run(self):
-        reader = ReadNewsFrom21(baseUrl="http://www.i21st.cn/story/index.html",rege="/story/\d{4}.html",rootUrl="http://www.i21st.cn")
-        reader.feedMsg()
+        readNewsFromText()
 class ArticleTask(Thread):
     def run(self):
         reader = ReadArticle(baseUrl="http://www.yingyu.com/dx/zuowen/yymwxs/",rege="/e/\d{8}/4d\w{11}.shtml",rootUrl="http://www.yingyu.com")
