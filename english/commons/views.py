@@ -16,14 +16,19 @@ from english.util.Task import NewsTask, ArticleTask, BusinessTask,CourseTask
 
 def index(request):
     news = News.objects.order_by("-createDate").all()[:10] #查询新闻前5条
+    carouselNews = News.objects.order_by("-readCount").filter(contentType=2).all()[0:5] #滚动
+    hotNews = News.objects.filter(hot=True).all()[0:10]
     shortArticle = ShortArticel.objects.order_by("-pointCount").all()[:10]   #精美短文
     businessArt = BusinessEssay.objects.order_by("-createDate").all()[:10]
     course = OpenCourse.objects.all()[0:10] #相关课程
     nav = urlMatch(request.path)
-    return render('index.html', {"news": news,
-                                             "article":shortArticle,
-                                             "course":course,
-                                             "business":businessArt}, request)
+    return render('index.html', {
+                                "news": news,
+                                "carNews":carouselNews,
+                                'hotNews':hotNews,
+                                "article":shortArticle,
+                                "course":course,
+                                "business":businessArt}, request)
 def TaskStart(request,comand):
     if comand and str(comand) == "start":
         task = NewsTask()
