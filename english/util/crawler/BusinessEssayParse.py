@@ -99,7 +99,7 @@ def saveCourse(cate,branch,url,photo):
     bodySt =htmlContent.find("<body>")
     bodyEnd =htmlContent.find("</body>")+7
     body = htmlContent[bodySt:bodyEnd]
-#    print chardet.detect(body)
+    #print chardet.detect(body)
     top = pq(body.decode("GB2312"))
     title = top(".m-cdes h2")[0]
     introduce = top(".m-cdes p")[2]

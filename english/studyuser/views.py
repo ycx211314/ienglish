@@ -89,3 +89,29 @@ def userExsit(request,name):
         return HttpResponse(getJson({"flag":"no"}))
     else:
         return HttpResponse(getJson({"flag":"ok"}))
+
+#微博登陆
+def wblogin(request):
+    if request.method == 'POST':
+        user = StudyUser();
+        user.userName=request.POST['uid']
+        user.nickName=request.POST['nickName']
+        user.photo=request.POST['photo']
+        user.passwords='--'
+        user.regDate = datetime.datetime.now().strftime('%Y-%m-%d')
+        user.email='--';
+        user.thirdType = 1
+        user.thirdId = '1';
+        user.third = '1';
+        user.thirdScrite = '1';
+        try:
+            users=StudyUser.objects.filter(userName=user.userName);
+            if len(users):
+                StudyUser.update(user)
+            else:
+                StudyUser.save(user)
+            request.session['loginFlag'] = True
+            request.session['login'] = user
+        except:
+            return HttpResponse(getJson({"flag":"no"}))
+        return HttpResponse(getJson({"flag":"yes"}))

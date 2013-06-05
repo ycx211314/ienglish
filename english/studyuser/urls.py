@@ -9,5 +9,6 @@ urlpatterns = patterns('',
     url(r'^check/$',view.userExsit),
     url(r'^login/$',view.login),
     url(r'^logout/$',view.logout),
+    url(r'^wblogin/$',view.wblogin),
 )
 
