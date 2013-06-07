@@ -57,9 +57,7 @@ function logout(){
         }
     });
     isLogin(false);
-    WB2.logout(function(){
-        alert('已退出!');
-    });
+
 }
 
 function wbdl(){

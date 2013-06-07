@@ -1,5 +1,5 @@
 # --*-- coding:utf-8 --*--
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 import os
 BASEPATH = os.path.abspath(os.path.dirname(__file__))
@@ -69,7 +69,8 @@ MEDIA_URL = '/upload/'
 # Don't put anything in this directory yourself; store your english.static files
 # in apps' "english.static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/english.static/"
-STATIC_ROOT ='' #os.path.join(BASEPATH,'static').replace('\\','/')
+STATIC_ROOT =os.path.join(BASEPATH,'static')#.replace('\\','/')
+ #os.path.join(BASEPATH,'static').replace('\\','/')
 # URL prefix for english.static files.
 # Example: "http://media.lawrence.com/english.static/"
 STATIC_URL = '/static/'
@@ -77,7 +78,9 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of english.static files
 STATICFILES_DIRS = (
-    os.path.join(BASEPATH,'static/'),
+    #os.path.join(BASEPATH,'static'),
+    #os.path.join(STATIC_ROOT,"js/").replace("\\","/"),
+    #os.path.join(STATIC_ROOT,"js").replace("\\","/"),
     #os.path.join(BASEPATH,'static').replace('\\','/'),
     #os.path.join(BASEPATH,'adminstatic').replace('\\','/'),
     # Put strings here, like "/home/html/english.static" or "C:/www/django/english.static".
@@ -141,11 +144,11 @@ INSTALLED_APPS = (
     'english.video',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
+    #"django.core.context_processors.media",
+    "django.core.context_processors.static",
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
