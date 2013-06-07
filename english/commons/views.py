@@ -1,6 +1,11 @@
 # Create your views here.
 # --*-- coding:utf-8 --*--
+import StringIO
 import datetime
+import Image
+import ImageDraw
+import ImageFilter
+import ImageFont
 from django.http import Http404, HttpResponse
 
 #跳转到主页
@@ -29,6 +34,15 @@ def index(request):
                                 "article":shortArticle,
                                 "course":course,
                                 "business":businessArt}, request)
+import random
+from english.commons.tools import createValidateCode
+def imageCode(request):
+    img,code = createValidateCode()
+    mstream = StringIO.StringIO()
+    img.save(mstream,"gif")
+    request.session['validateCode'] = code
+    return HttpResponse(mstream.getvalue(),"image/jpge")
+    pass
 def TaskStart(request,comand):
     if comand and str(comand) == "start":
         task = NewsTask()

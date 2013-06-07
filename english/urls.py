@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^upload/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT},name="upload"),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r"^console/",include("english.adminConsole.urls")),
     #新闻相关
     url(r"^news/",include('english.news.urls')),
     #用户相关
@@ -24,5 +26,6 @@ urlpatterns = patterns('',
     #首先相关
     url(r'^index/$',index),
     url(r'^$',index),
+    url(r"^imageCode/$",imageCode),
     url(r'^task/(\w+)/$',TaskStart)
 )
