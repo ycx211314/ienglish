@@ -2,18 +2,19 @@
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 import os
-BASEPATH = os.path.abspath(os.path.dirname(__file__))
+BASEPATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+ALLOWED_HOSTS="*"
 APPEND_SLASH=False
 MANAGERS = ADMINS
 #
 if 'SERVER_SOFTWARE' in os.environ:
    from sae.const import (
-       MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
-       )
+        MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
+        )
 else:
     # Make `python manage.py syncdb` works happy!
     MYSQL_HOST = '127.0.0.1'
@@ -69,7 +70,7 @@ MEDIA_URL = '/upload/'
 # Don't put anything in this directory yourself; store your english.static files
 # in apps' "english.static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/english.static/"
-STATIC_ROOT =os.path.join(BASEPATH,'static')#.replace('\\','/')
+STATIC_ROOT=os.path.join(BASEPATH,'static')
  #os.path.join(BASEPATH,'static').replace('\\','/')
 # URL prefix for english.static files.
 # Example: "http://media.lawrence.com/english.static/"
@@ -142,6 +143,7 @@ INSTALLED_APPS = (
     'english.commons',
     'english.article',
     'english.video',
+    'english.adminConsole',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     #"django.core.context_processors.media",

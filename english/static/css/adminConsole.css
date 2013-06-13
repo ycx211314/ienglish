@@ -1,0 +1,40 @@
+.datagrid {margin-bottom: 0px;padding: 0px;}
+.datagrid td{padding: 0px;font-size: 12px;}
+.datathead{
+    text-align: center;
+    font-weight: bold;
+}
+.datagrid .datagrid-pagination{margin: 0px;}
+.grid-checkbox{
+    width: 5px;
+}
+.grid-checkbox input[type='checkbox']{margin: 0px;}
+.datagrid-header{
+    margin: 0;
+    padding: 5px 10px;
+    background-color: #F7F7F7;
+    border-radius: 5px 5px 0px 0px
+}
+.pagination{
+    margin: 0;
+    padding: 5px 10px;
+    background-color: #F7F7F7;
+    border-radius: 0px 0px 5px 5px;
+}
+.pagination .btn-datagrid{
+    text-decoration: none;
+    color: #0088CC;
+}
+.pagination .btn-datagrid:hover{
+    background: #FFFFFF;
+}
+.displayText{
+    float: right;
+}
+.datarow td{padding: 8px;cursor: pointer;font-size: 12px;}
+.displayText .btn-datagrid:hover{background:transparent;}
+.datatable{background:#fff;}
+.datatable td{background:transparent;}
+.datagridTable *{
+    text-align: center;
+}
