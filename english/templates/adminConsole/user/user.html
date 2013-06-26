@@ -1,64 +1,37 @@
-{% extends "adminConsole/admin.html" %}
+{% extends "adminConsole/templateAdmin.html" %}
 {% block title %}
     管理平台
 {% endblock %}
 {% block res %}
     <script type="text/javascript">
         $(function(){
-            $("#myGrid").datagrid({
-                checkbox:true,
+            $("#userGrid").datagrid({
+                fit:true,
+                fitColumns:true,
                 title:'用户信息',
-                columns:[
-                    {title:"登录名称",name:'userName'},
-                    {title:'用户昵称',name:'nickName'},
-                    {title:"邮箱地址",name:'email'},
-                    {title:"注册时间",name:'regDate'},
-                    {title:"年龄",name:'passwords'}
-                ],
+                idField:"id",
                 url:"/console/user/list/",
-                pagelist:[10,20,30,50],
-                pagination:true,
-                idField:"mx"
+                queryParams:{"csrfmiddlewaretoken": English.Common.cookieTool.getCsrftoken()},
+                columns:[[
+                    {field:"id",checkbox:true},
+                    {title:"登录名称",field:'userName',width:100},
+                    {title:'用户昵称',field:'nickName',width:100},
+                    {title:"邮箱地址",field:'email',width:100},
+                    {title:"注册时间",field:'regDate',width:100},
+                    {title:"年龄",field:'passwords',width:100}
+                ]],
+                toolbar:"#userGridTools",
+                pagination:true
+
             })
         });
     </script>
 {% endblock %}
 {% block content %}
-    <div class="row-fluid">
-        <ul class="breadcrumb">
-            <li><a href="#">首页</a> <span class="divider">/</span></li>
-            <li><a href="#">用户管理</a> <span class="divider">/</span></li>
-            <li class="active">预览</li>
-        </ul>
+    <div class="row-fluid" style="height: 100%;">
+        <table id="userGrid" style="width:100%;"></table>
+        <div id="userGridTools">
+            <button class="btn btn-small btn-primary">删除</button>
+        </div>
     </div>
-    <div class="row-fluid">
-        <table id="myGrid">
-            <!--
-            <thead>
-                <tr class="info">
-                    <td class="grid-checkbox"><input type="checkbox"/></td>
-                    <td>登录名称</td>
-                    <td>用户昵称</td>
-                    <td>用户年龄</td>
-                    <td>其他</td>
-                    <td>操作</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-            </tbody>
-            -->
-        </table>
-    </div>
-
-    <!--内容页面-->
-    用户页面
-    <!--内容页面 end -->
 {% endblock %}

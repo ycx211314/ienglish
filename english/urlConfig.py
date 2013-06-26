@@ -6,6 +6,7 @@ urlConfigs = {
     r"^/$":1,
     r"/news/\.?":2,
     r"/read/\.?":3,
+    r"/video/\.?":4,
     }
 class Nav:
     def __init__(self):

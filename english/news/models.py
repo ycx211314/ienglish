@@ -7,7 +7,7 @@ class News(models.Model):
     CONTENT_TYPE = (
         (1, '文章'),
         (2, '图文'),
-        (3, '多图'),
+        (3, '分页'),
         (4, '其他'),
     )
     TAG={"sports":'体育',"entertainment":'娱乐',"politics":"时政","campus":"校园","life":"生活","economy":"经济","tech":"科技","career":"职场"}
@@ -34,6 +34,7 @@ class News(models.Model):
     # imageShow = models.ImageField(verbose_name="插图",upload_to="newsImg",blank=True)
     commentCount = models.IntegerField(verbose_name="评论数",default=0)
     # lastUpdateFlag = models.IntegerField(default=0)
+    versions = models.IntegerField(blank=True)
     createDate = models.DateTimeField()
     class Meta:
         get_latest_by = "-createDate"

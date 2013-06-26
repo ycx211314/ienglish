@@ -1,64 +1,263 @@
-{% extends "adminConsole/admin.html" %}
+{% extends "adminConsole/templateAdmin.html" %}
 {% block title %}
     管理平台
 {% endblock %}
 {% block res %}
+    <script type="text/javascript" src="/static/adminConsole/js/kindeditor-all-min.js"></script>
+    <script type="text/javascript" src="/static/adminConsole/js/zh_CN.js"></script>
+    <script src="/static/js/masonry.pkgd.min.js"></script>
+    <style>
+        .form-horizontal .controls {
+            margin-left: 100px;
+        }
+        .form-horizontal .control-label {
+           width: 80px;
+        }
+    </style>
     <script type="text/javascript">
         $(function(){
-            $("#myGrid").datagrid({
-                checkbox:true,
-                title:'新闻列表',
-                columns:[
-                    {title:"标题",name:'title',width:20},
-                    {title:'类别',name:'categroy',width:10},
-                    {title:"导读",name:'introduce',width:50},
-                    {title:"注册时间",name:'createDate',width:20}
-                ],
+            $("#newGridTools .dropdown-toggle").attr("disabled","disabled")
+            $("#newGrid").datagrid({
+                fit:true,
+                fitColumns:true,
+                title:'双语新闻',
+                idField:"id",
+                striped:true,
+                nowrap:true,
+                selectOnCheck:false,
                 url:"/console/news/list/",
-                pagesize:5,
-                pagelist:[5,10,20,30,50],
-                pagination:true,
-                idField:"id"
-            })
+                queryParams:{"csrfmiddlewaretoken": English.Common.cookieTool.getCsrftoken(),"category":$("#category").val()/1},
+                columns:[[
+                    {checkbox:true},
+                    {title:"新闻标题",field:'title',width:120},
+                    {title:'类型',field:'contentType',width:20,formatter:function(value){
+                        switch (value){
+                            case 1:
+                                return "文章";
+                            case 2:
+                                return "图文"
+                            default:
+                                return "错误"
+                        }
+                    }},
+                    {title:"导读",field:'introduce',width:120},
+                    {title:"阅读量",field:'readCount',width:20,sortable:true,align:"center"},
+                    {title:"分享数",field:'shareCount',width:20,sortable:true,align:"center"},
+                    {title:"来源",field:'comeFrom',width:50,align:"center"},
+                    {title:"是否热点",field:'hot',width:20,sortable:true,align:"center"},
+                    {title:"日期",field:'createDate',width:50,sortable:true,align:"center"},
+                    {title:"操作",field:'id',align:"left",width:100,formatter:function(value){
+                        var htm = "<div class='text-center'><button title='编辑' class='btn btn-mini btn-warning btnEdit' onclick=editNews("+value+")><i class='icon-edit'></i></button> "+
+                                "<button title='图片预览' class='btn btn-mini btn-info btnEdit' onclick=showPic("+value+")><i class='icon-picture'></i></button> "+
+                                "<a title='预览' class='btn btn-mini btn-success btnEdit' href='/news/detail/"+value+"/' target='_blank'><i class='icon-file-alt'></i></a> "+
+                                "<button title='删除' class='btn btn-mini btn-danger btnEdit' onclick=delNews("+value+")><i class='icon-remove'></i></button> "+
+                                "</div>"
+                        return htm
+                    }}
+                ]],
+                onCheck:function(index,rowdata){
+                    if ($(this).datagrid("getChecked") && $(this).datagrid("getChecked").length>0){
+                        $("#newGridTools .dropdown-toggle").removeAttr("disabled")
+                    }else{
+                        $("#newGridTools .dropdown-toggle").attr("disabled","disabled")
+                    }
+
+                },
+                onUncheck:function(index,rowdata){
+                    if ($(this).datagrid("getChecked") && $(this).datagrid("getChecked").length>0){
+                        $("#newGridTools .dropdown-toggle").removeAttr("disabled")
+                    }else{
+                        $("#newGridTools .dropdown-toggle").attr("disabled","disabled")
+                    }
+                },
+                onLoad:function(){
+                    $("#newGridTools .dropdown-toggle").attr("disabled","disabled")
+                },
+                toolbar:"#newGridTools",
+                pagination:true
+            }) ;
         });
+    function editNews(id){
+        new English.Common.News(id).editNewsPre('editNews','editButtons')
+    }
+    function delNews(id){
+        new English.Common.News(id).delNews(function(){
+            $("#newGrid").datagrid("reload");
+        });
+    }
+    function delCheckedNews(){
+        var rows = $("#newGrid").datagrid("getChecked");
+        var ids = "";
+        if (rows && rows.length>0){
+            for(var index=0;index<rows.length;index++){
+                ids +=rows[index].id+","
+            }
+            ids = ids.substr(0,ids.length-1);
+        }else{
+            return;
+        }
+        $.ajax({
+            url:"/console/news/del/",
+            data:"ids="+ids+"&csrfmiddlewaretoken=" + English.Common.cookieTool.getCsrftoken(),
+            type:'post',
+            dataType:"json",
+            success:function(data){
+                if(data.flag && data.flag=="yes"){
+                    $("#newGrid").datagrid("reload");
+                }
+            }
+        });
+    }
+    function pointHotNews(flag){
+        var rows = $("#newGrid").datagrid("getChecked");
+        var ids = "";
+        if (rows && rows.length>0){
+            for(var index=0;index<rows.length;index++){
+                ids +=rows[index].id+","
+            }
+            ids = ids.substr(0,ids.length-1);
+        }else{
+            return;
+        }
+        $.ajax({
+            url:"/console/news/hot/",
+            data:"hot="+flag+"&ids="+ids+"&csrfmiddlewaretoken=" + English.Common.cookieTool.getCsrftoken(),
+            type:'post',
+            dataType:"json",
+            success:function(data){
+                if(data.flag && data.flag=="yes"){
+                    $("#newGrid").datagrid("reload");
+                }
+            }
+        });
+    }
+    function showPic(id){
+        new English.Common.News(id).showPic("newsPic","picButtons");
+    }
+    function uploadPic(){
+        $("#picForm").form("submit",{
+            url:"/console/news/pic/upload/",
+            onSubmit:function(param){
+                var files = document.getElementById("uploadPic").files
+                if (files && files.length >0){
+                    for(var i =0; i < files.length; i++){
+                        if (!/image\/\w+/.test(files[i].type)){
+                            $("#picInfo").addClass("warning").html(files[i].name+"非图像文件")
+                            return false;
+                        }
+                    }
+                }
+                param.csrfmiddlewaretoken=English.Common.cookieTool.getCsrftoken();
+            },
+            success:function(data){
+                $("#newsPic").dialog("refresh");
+                $("#btn-upload").attr("disabled","disabled");
+                $("#btn-upload").addClass("disabled");
+            }
+
+        });
+    }
+    function updateNews(){
+        KindEditor.sync('.contentqq')
+        $("#editForm").form("submit",{
+            url:"/console/news/update/",
+            onSubmit: function(param){
+                param.csrfmiddlewaretoken = English.Common.cookieTool.getCsrftoken();
+            },
+            success:function(data){
+                json = $.evalJSON(data);
+                if (json.flag == "yes"){
+                    $("#newGrid").datagrid("reload");
+                    closeDialog();
+                }
+            }
+        });
+    }
+    function closeDialog(id){
+        $("#"+id).dialog("close");
+    }
+    function NewsSearch(){
+        var datas = $("#searchForm").serializeArray();
+        var param = {};
+        for(var x=0;x<datas.length;x++){
+            if (datas[x].value !="0" && datas[x].value.length >0){
+                param[datas[x].name]=datas[x].value
+            }
+        }
+        param["csrfmiddlewaretoken"] =English.Common.cookieTool.getCsrftoken();
+        $("#newGrid").datagrid({
+            queryParams:param,
+            page:1
+        });
+    }
     </script>
 {% endblock %}
 {% block content %}
-    <div class="row-fluid">
-        <ul class="breadcrumb">
-            <li><a href="#">首页</a> <span class="divider">/</span></li>
-            <li><a href="#">用户管理</a> <span class="divider">/</span></li>
-            <li class="active">预览</li>
-        </ul>
+    <div class="row-fluid" style="height: 100%;">
+        <table id="newGrid" style="width:100%;"></table>
+        <div id="newGridTools">
+            <form class="form-inline" style="margin: 0px;" id="searchForm">
+                <div class="btn-group" style="margin: 0px;">
+                    <button class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" disabled="disabled">
+                        <i class="icon-cog"></i> 操作
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:pointHotNews(1);"><i class="icon-check"></i>标注热点</a></li>
+                        <li><a href="javascript:pointHotNews(0);"><i class="icon-check-empty"></i>取消热点</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:delCheckedNews();"><i class="icon-remove"></i>删除所选</a></li>
+                    </ul>
+                </div>
+                <div class="input-prepend">
+                    <span class="add-on">类别:</span>
+                    <select class="input-small" id="category" name="categroy" style="margin:0px;">
+                        <option value="0" selected="selected" >全部</option>
+                        {% for cate in category %}
+                            <option value="{{ cate.id }}">{{ cate.typeName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-prepend">
+                    <span class="add-on">类型:</span>
+                    <select class="input-small" name="contentType" style="margin: 0px;">
+                        <option value="0">--全部--</option>
+                        <option value=1>文章</option>
+                        <option value=2>图文</option>
+                        <option value=3>分页</option>
+                        <option value=4>其他</option>
+                    </select>
+                </div>
+                <div class="input-prepend">
+                    <span class="add-on">热点:</span>
+                    <select class="input-small" name="hot" style="margin: 0px;">
+                        <option value="0">--全部--</option>
+                        <option value=true>是</option>
+                        <option value=false>否</option>
+                    </select>
+                </div>
+                <div class="input-prepend">
+                    <span class="add-on">时间:</span>
+                    <input type="text" name="startTs" class="input-small easyui-datebox" editable="false" style="height: 30px;" />至<input type="text" name="endTs" class="input-small easyui-datebox" editable="false" style="height: 30px;" />
+                </div>
+                <div class="input-prepend input-append">
+                    <span class="add-on">标题:</span>
+                    <input class="input-small" name="titleLike" id="appendedPrependedInput" type="text">
+                    <button class="btn" type="button" onclick="NewsSearch();"><i class="icon-search"></i></button>
+                </div>
+                </form>
+        </div>
     </div>
-    <div class="row-fluid">
-        <table id="myGrid">
-            <!--
-            <thead>
-                <tr class="info">
-                    <td class="grid-checkbox"><input type="checkbox"/></td>
-                    <td>登录名称</td>
-                    <td>用户昵称</td>
-                    <td>用户年龄</td>
-                    <td>其他</td>
-                    <td>操作</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-            </tbody>
-            -->
-        </table>
+    <div style="display: none;">
+    <div id="editNews"></div>
+    <div id="editButtons">
+        <button class="btn btn-primary btn-small" onclick="updateNews()">确定</button>
+        <button class="btn btn-primary btn-small" onclick="closeDialog('editNews');">取消</button>
     </div>
-
-    <!--内容页面-->
-    用户页面
-    <!--内容页面 end -->
+    <div id="newsPic"></div>
+        <div id="picButtons">
+            <button class="btn btn-primary btn-small disabled" id="btn-upload" disabled="disabled" onclick="uploadPic()">上传图片</button>
+            <button class="btn btn-primary btn-small" onclick="closeDialog('newsPic');">取消</button>
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>增加任务</title>
+</head>
+<body class="dialogBody">
+<form class="form-horizontal editDialog" id="addForm" method="post" enctype="multipart/form-data">
+    <div class="control-group">
+        <label class="control-label" for="title">任务名称</label>
+        <div class="controls">
+            <input type="text" id="title" name="taskName" class="input-xlarge" placeholder="请输入任务名称">
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" >任务类型</label>
+        <div class="controls">
+            <select name="taskType" class="input-xlarge">
+                <option value="1">新闻</option>
+                <option value="2">公开课</option>
+                <option value="3">文章</option>
+            </select>
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" >任务资源</label>
+        <div class="controls">
+            <input type="file" name="taskFile">
+            <span class="help-inline"></span>
+        </div>
+    </div>
+</form>
+</body>
+</html>

@@ -3,3 +3,17 @@
     float: none !important;
     margin-left: auto !important;
     margin-right: auto !important;}
+.editDialog{
+    margin: 0px;
+}
+.editDialog .control-group{
+    margin-bottom: 5px;
+}
+.editDialog .overHiddenX{
+    overflow-x: hidden;
+}
+.dialogBody{
+    height: auto;
+    margin: 0px;
+    padding:0px;
+}

@@ -37,7 +37,7 @@
     {% spaceless %}
         <div class="span12">
             <h4>导读：</h4>
-            <p class="text-left">{{ news.introduce }}</p>
+            <p class="text-left">{{ news.introduce|safe }}</p>
         </div>
         <div class="span12 row-fluid">
             <div class="span9">

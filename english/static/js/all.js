@@ -48,6 +48,11 @@ English.Common.News = function (id) {
     this.readUrl = "/news/read/" + this.id + "/"
     this.commentUrl = "/news/comment/add/";
     this.agreeUrl = "/news/comment/agree/"
+    this.editUrl = "/console/news/edit/"+this.id+"/"
+//    this.updateUrl = "/console/news/update/"
+    this.delUrl = "/console/news/del/"
+    this.newsPic = "/console/news/pic/"+this.id+"/"
+    this.delPicUrl = "/console/news/pic/del/"
 }
 English.Common.News.prototype = {
     newsDetailInit: function (newId) {
@@ -119,6 +124,76 @@ English.Common.News.prototype = {
     },
     noAgreeWithComment:function(comId){
         $.get(this.agreeUrl+"down/",{"comId":comId});
+    },
+    editNewsPre:function(dialogId,buttonId){
+        $("#"+dialogId).dialog({
+            title: '修改',
+            fit:true,
+            cls:"overHiddenX",
+            closed: false,
+            cache: false,
+            href:this.editUrl,
+            onLoad:function(){
+                KindEditor.create('#'+dialogId+' .contentqq', {
+                    themeType : 'qq',
+                    width:"90%",
+                    items : [
+                        'bold','italic','underline','fontname','fontsize','forecolor','hilitecolor','plug-align','plug-order','plug-indent','link'
+                    ]
+                });
+            },
+            buttons:"#"+buttonId,
+            modal: true
+        });
+    } ,
+    delNews:function(func){
+        $.ajax({
+            url:this.delUrl,
+            type:"post",
+            data:"id="+this.id+"&csrfmiddlewaretoken=" + English.Common.cookieTool.getCsrftoken(),
+            dataType:"json",
+            success:function(data){
+                if(data.flag && data.flag=="yes"){
+                    func()
+                }
+            }
+        });
+    },
+    showPic:function(dialogId,buttonId){
+        $("#"+dialogId).dialog({
+            title: '图片查看',
+            fit:true,
+            cls:"overHiddenX",
+            closed: false,
+            cache: false,
+            href:this.newsPic,
+            buttons:"#"+buttonId,
+            onLoad:function(){
+                var $container = $('#container');
+                $container.masonry({
+                    columnWidth: 10,
+                    itemSelector: '.item'
+                });
+                $("#"+dialogId+" input[type='file']").change(function(){
+                    $("#btn-upload").removeAttr("disabled");
+                    $("#btn-upload").removeClass("disabled");
+                });
+                $(".updateBtn").bind("click",function(){
+                    $(this).prev().click();
+                })
+            },
+            modal: true
+        });
+    },
+    delPic:function(key){
+        $.post(this.delPicUrl,{"delId":key,"csrfmiddlewaretoken":English.Common.cookieTool.getCsrftoken()},function(){
+            $("#img"+key).remove();
+            var $container = $('#container');
+            $container.masonry({
+                columnWidth: 10,
+                itemSelector: '.item'
+            });
+        });
     }
 }
 Namespace.register("English.index");
@@ -234,5 +309,75 @@ English.Validation.validation.prototype = {
         'remote': '该名称已经被占用',
         'pattern': '内容格式错误',
         'length': '内容长度必须在[0]和[1]之间'
+    }
+}
+English.Common.Task=function(id){
+    this.id = id;
+    this.addURL="/console/task/preAdd/";
+    this.delURL="/console/task/del/";
+    this.editURL="/console/task/editPre/"+this.id+"/";
+    this.startURL = "/console/task/process/"
+}
+English.Common.Task.prototype={
+    addTask:function(dialogId,buttonId){
+        $("#"+dialogId).dialog({
+            title: '增加',
+            width:800,
+            height:200,
+            cls:"overHiddenX",
+            closed: false,
+            cache: false,
+            href:this.addURL,
+            onLoad:function(){
+            },
+            buttons:"#"+buttonId,
+            modal: true
+        });
+    },
+    editTask:function(dialogId,buttonId){
+        $("#"+dialogId).dialog({
+            title: '修改',
+            width:800,
+            height:200,
+            cls:"overHiddenX",
+            closed: false,
+            cache: false,
+            href:this.editURL,
+            onLoad:function(){
+            },
+            buttons:"#"+buttonId,
+            modal: true
+        });
+    },
+    startTask:function(succ,fail){
+        $.ajax({
+            url:this.startURL,
+            data:"id="+this.id+"&csrfmiddlewaretoken=" + English.Common.cookieTool.getCsrftoken(),
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                if(data.flag=="yes"){
+                     succ()
+                }else{
+                     fail()
+                }
+            }
+        });
+    },
+    delTask:function(success,fail){
+        $.ajax({
+            url:this.delURL,
+            data:"id="+this.id+"&csrfmiddlewaretoken=" + English.Common.cookieTool.getCsrftoken(),
+            dataType:"json",
+            type:"post",
+            success:function(data){
+                if (data.flag == "yes"){
+                    success()
+                }else{
+                    fail()
+                }
+
+            }
+        });
     }
 }

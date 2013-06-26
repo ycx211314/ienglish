@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>修改任务</title>
+</head>
+<body class="dialogBody">
+<form class="form-horizontal editDialog" id="editForm" method="post" enctype="multipart/form-data">
+    <div class="control-group">
+        <label class="control-label" for="title">任务名称</label>
+        <div class="controls">
+            <input type="text" id="title" name="taskName" class="input-xlarge" value="{{ task.taskName }}">
+            <input type="hidden" name="id" value="{{ task.id }}" />
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" >任务类型</label>
+        <div class="controls">
+            <select name="taskType" class="input-xlarge" value="{{ task.taskType }}">
+                <option value="1" {% if task.taskType == 1 %}selected="selected" {% endif %}>新闻</option>
+                <option value="2" {% if task.taskType == 2 %}selected="selected" {% endif %}>文章</option>
+                <option value="3" {% if task.taskType == 3 %}selected="selected" {% endif %}>公开课</option>
+            </select>
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" >任务资源</label>
+        <div class="controls">
+            <input type="file" name="taskFile">
+            <span class="help-inline"></span>
+        </div>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>修改</title>
+</head>
+<body class="dialogBody">
+<form class="form-horizontal editDialog" id="editForm" method="post">
+    <div class="control-group">
+        <label class="control-label" for="title">中文标题</label>
+        <div class="controls">
+            <input type="text" id="title" name="title" class="input-xlarge" value="{{ news.title }}">
+            <input type="hidden" name="id" value="{{ news.id }}" />
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="titleEn" >英文标题</label>
+        <div class="controls">
+            <input type="text" id="titleEn" name="titleEnglish" class="input-xlarge" value="{{ news.titleEnglish }}">
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="titleEn" >类别</label>
+        <div class="controls">
+            <select name="category" class="input-xlarge">
+                {% for cate in category %}
+                    <option value="{{ cate.id }}" {% if cate.id == news.categroy_id %}selected="selected" {% endif %}>{{ cate.typeName }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="introduce">导读</label>
+        <div class="controls">
+            <textarea class="contentqq" id="introduce" name="introduce" style="height: 20px;">{{ news.introduce }}</textarea>
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="content">中文</label>
+        <div class="controls">
+            <textarea class="contentqq" id="content" name="content">{{ news.content }}</textarea>
+            <span class="help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="contentEn">英文</label>
+        <div class="controls">
+            <textarea class="contentqq" id="contentEn" name="contentEnglish">{{ news.contentEnglish }}</textarea>
+            <span class="help-inline"></span>
+        </div>
+    </div>
+</form>
+</body>
+</html>

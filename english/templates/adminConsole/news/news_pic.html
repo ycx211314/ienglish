@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新闻图片</title>
+</head>
+<body class="dialogBody">
+<div class="container-fluid">
+<div class="span12">
+    <form id="picForm" method="post" action="/console/news/pic/upload/" enctype="multipart/form-data">
+        <div>
+            <input type="file" name="pic" id="uploadPic" style="display: none;" multiple="true">
+            <input type="button" class="btn btn-primary updateBtn" value="选择图片"/>
+            <input type="hidden" name="id" value="{{ news.id }}" />
+            <span class="help-inline" id="picInfo"></span>
+        </div>
+    </form>
+
+</div>
+<div id="container" class="span12">
+    {% for img in news.newsres_set.all %}
+    <div class="item well" id="img{{ img.id }}">
+        <div><img src="/upload/{{ img.resUrl }}" alt="" class="img-polaroid"/></div>
+        <div style="text-align: center;"><button class="btn btn-small btn-link" onclick="new English.Common.News({{ news.id }}).delPic({{ img.id }});"><i class="icon-remove"></i>删除</button></div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+</body>
+</html>

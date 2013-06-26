@@ -1,0 +1,173 @@
+{% extends "adminConsole/templateAdmin.html" %}
+{% block title %}
+    管理平台-任务管理
+{% endblock %}
+{% block res %}
+    <style>
+        .form-horizontal .controls {
+            margin-left: 100px;
+        }
+        .form-horizontal .control-label {
+           width: 80px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function(){
+            $("#newGridTools .dropdown-toggle").attr("disabled","disabled")
+            $("#taskGrid").datagrid({
+                fit:true,
+                fitColumns:true,
+                title:'任务管理',
+                idField:"id",
+                striped:true,
+                nowrap:true,
+                selectOnCheck:false,
+                url:"/console/task/list/",
+                queryParams:{"csrfmiddlewaretoken": English.Common.cookieTool.getCsrftoken()},
+                columns:[[
+                    {checkbox:true},
+                    {title:"任务名称",field:'taskName',width:120},
+                    {title:'任务类型',field:'taskType',width:80,formatter:function(value){
+                        switch (value){
+                            case 1:
+                                return "新闻";
+                            case 2:
+                                return "文章"
+                            default:
+                                return "公开课"
+                        }
+                    }},
+                    {title:"任务状态",field:'processFlag',width:120,formatter:function(value){
+                        switch (value){
+                            case "Prepare":
+                                return "未开始";
+                            case "":
+                                return "进行中";
+                            case "":
+                                return "出错异常";
+                            case "":
+                                return "完成";
+                            default :
+                                return "";
+                        }
+                    }},
+                    {title:"开始日期",field:'startTs',width:120,sortable:true,align:"center"},
+                    {title:"完成日期",field:'endTs',width:120,sortable:true,align:"center"},
+                    {title:"操作",field:'id',align:"left",width:100,formatter:function(value,row,indez){
+                        var htm = "";
+                        console.debug(row.processFlag);
+                        if (row.processFlag == "Prepare"){
+                            htm += "<div class='text-center'><button title='开始任务' class='btn btn-mini btn-warning btnEdit' onclick=startTask("+value+")><i class=' icon-play-circle'></i></button> "+
+                                    "<button title='修改' class='btn btn-mini btn-success btnEdit' onclick=editTask("+value+")><i class='icon-edit'></i></button> "+
+                                    "<button title='删除' class='btn btn-mini btn-danger btnEdit' onclick=delTask("+value+")><i class='icon-remove'></i></button> "+
+                                    "</div>"
+                        }else{
+                            htm +="<div class='text-center'><button title='开始任务' class='btn btn-mini btn-warning btnEdit' disabled='disabled'><i class=' icon-play-circle'></i></button> "+
+                            "<button title='修改' class='btn btn-mini btn-success btnEdit' disabled='disabled'><i class='icon-edit'></i></button> "+
+                            "<button title='删除' class='btn btn-mini btn-danger btnEdit' disabled='disabled'><i class='icon-remove'></i></button> "+
+                            "</div>"
+                        }
+
+
+
+                        return htm
+                    }}
+                ]],
+                toolbar:"#newGridTools",
+                pagination:true
+            }) ;
+        });
+    function closeDialog(id){
+        $("#"+id).dialog("close");
+    }
+    function delTask(id){
+        new English.Common.Task(id).delTask(function(){
+            $("#taskGrid").datagrid("reload");
+        },function(){
+            $.messager.show({
+                title:'信息',
+                msg:'删除失败',
+                timeout:5000,
+                showType:'slide'
+            })
+        });
+    }
+    function editTask(id){
+        new English.Common.Task(id).editTask('editTask','editButtons');
+    }
+    function openaddTask(){
+        new English.Common.Task().addTask('editTask','addButtons');
+    }
+    function addTask(){
+        $("#addForm").form("submit",{
+            url:"/console/task/add/",
+            onSubmit:function(param){
+                param.csrfmiddlewaretoken = English.Common.cookieTool.getCsrftoken();
+            },
+            success:function(data){
+                var json = $.evalJSON(data)
+                if(json.flag == "yes"){
+                    closeDialog("editTask");
+                    $("#taskGrid").datagrid("reload");
+                }else{
+                    $.messager.show({
+                        title:'信息',
+                        msg:'添加任务失败',
+                        timeout:5000,
+                        showType:'slide'
+                    })
+                }
+            }
+        });
+    }
+    function startTask(id){
+        new English.Common.Task(id).startTask(function(){$("#taskGrid").datagrid("reload");},function(){$.messager.show({
+            title:'信息',
+            msg:'启动任务失败',
+            timeout:5000,
+            showType:'slide'
+        })});
+    }
+    function sendEditTask(){
+        $("#editForm").form("submit",{
+            url:"/console/task/edit/",
+            onSubmit:function(param){
+                param.csrfmiddlewaretoken = English.Common.cookieTool.getCsrftoken();
+            },
+            success:function(data){
+                var json = $.evalJSON(data)
+                if(json.flag == "yes"){
+                    closeDialog("editTask");
+                    $("#taskGrid").datagrid("reload");
+                }else{
+                    $.messager.show({
+                        title:'信息',
+                        msg:'修改失败',
+                        timeout:5000,
+                        showType:'slide'
+                    })
+                }
+            }
+        });
+    }
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="row-fluid" style="height: 100%;">
+        <table id="taskGrid" style="width:100%;"></table>
+        <div id="newGridTools">
+            <button class="btn btn-primary btn-small" onclick="openaddTask();">增加</button>
+        </div>
+    </div>
+    <div style="display: none;">
+    <div id="editTask"></div>
+    <div id="addButtons">
+        <button class="btn btn-primary btn-small" onclick="addTask()">确定</button>
+        <button class="btn btn-primary btn-small" onclick="closeDialog('editTask');">取消</button>
+    </div>
+    <div id="editButtons">
+        <button class="btn btn-primary btn-small" onclick="sendEditTask()">确定</button>
+        <button class="btn btn-primary btn-small" onclick="closeDialog('editTask');">取消</button>
+    </div>
+    </div>
+{% endblock %}

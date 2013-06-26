@@ -58,6 +58,11 @@
                 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
                 '<h3>'+this.opt.title+'</h3>'+
                 "</div>");
+            if(this.opt.toolbar){
+                $(this.opt.toolbar).appendTo(this._table);
+               // $(this._table).before($(this.opt.toolbar));
+                alert(1)
+            }
             $(this._table).addClass("table datagrid")
             $(this._table).css("border-left","1px solid #F7F7F7")
             $(this._table).css("border-right","1px solid #F7F7F7")
