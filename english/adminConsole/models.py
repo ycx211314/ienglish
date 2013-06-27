@@ -34,3 +34,11 @@ class ContentTask(models.Model):
 
     def __unicode__(self):
         return self.taskName
+    def delete(self, using=None):
+        from english.util.storagetool import delFile
+        delFile(self.resUrl.name)
+        models.Model.delete(self)
+    def save(self, force_insert=False, force_update=False, using=None):
+        from english.util.storagetool import uploadFile
+        uploadFile("taskFiles"+"/"+self.fileName.name,)
+        delFile(self.resUrl.name)

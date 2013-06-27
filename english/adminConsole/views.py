@@ -1,7 +1,9 @@
 # Create your views here.
 # --*-- coding:utf-8 --*--
 import uuid,os,datetime
-from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Manager
+from django.db.models.query import QuerySet
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate,login
 from english.adminConsole.models import ContentTask
@@ -22,15 +24,18 @@ def adminLogin(request):
 def loginPre(request):
     return consoleRender(r"adminConsole"+os.path.sep+"login.html",{},request)
 #管理首页
+@login_required(login_url="/console/login/")
 def index(request):
     if request.user:
         return consoleRender(r"adminConsole"+os.path.sep+"index.html",{},request)
     else:
         return HttpResponseRedirect("/console/login/")
 #用户管理
+@login_required(login_url="/console/login/")
 def userIndex(request):
     return consoleRender(r"adminConsole"+os.path.sep+"user"+os.path.sep+"user.html",{},request)
 #用户列表
+@login_required(login_url="/console/login/")
 def userlist(request):
     page,pageSize = 1,10
     if request.POST.get("page") and request.POST.get("rows"):
@@ -45,10 +50,12 @@ def userlist(request):
     json = getJson({"rows":users[(page-1)*pageSize:end],"total":len(users)})
     return HttpResponse(json)
 #双语新闻
+@login_required(login_url="/console/login/")
 def newIndex(request):
     category = NewsCategory.objects.order_by("-typeOrder").all()
     return consoleRender(r"adminConsole"+os.path.sep+"news"+os.path.sep+"news.html",{"category":category},request)
 #双语信息列表
+@login_required(login_url="/console/login/")
 def newslist(request):
     page,pageSize =1,10
     if request.POST.get("page") and request.POST.get("rows"):
@@ -91,6 +98,7 @@ def newslist(request):
     json = getJson({"rows":users[(page-1)*pageSize:end],"total":len(users)})
     return HttpResponse(json)
 #新闻编辑
+@login_required(login_url="/console/login/")
 def newsEdit(request,id):
     try:
         news = News.objects.get(id=int(id))
@@ -99,6 +107,7 @@ def newsEdit(request,id):
         return Http404()
     return consoleRender(r"adminConsole"+os.path.sep+"news"+os.path.sep+"newsEdit.html",{"news":news,"category":cate},request)
 #新闻修改
+@login_required(login_url="/console/login/")
 def newsUpdate(request):
     if request.POST.get("id"):
         try:
@@ -112,14 +121,17 @@ def newsUpdate(request):
         json = getJson({"flag":"no"})
     return HttpResponse(json)
 #删除新闻
+@login_required(login_url="/console/login/")
 def newsDel(request):
     try:
         if request.POST.get("id"):
             delNews = News.objects.get(id=int(request.POST["id"]))
-            delNews.delete()
+            delNews.objects.filter()
+            QuerySet
         elif request.POST.get("ids"):
             idArray = str(request.POST["ids"]).split(",")
-            News.objects.filter(id__in=idArray).delete()
+            for news in News.objects.filter(id__in=idArray):
+                news.delete()
         else:
             json = getJson({"flag":"no"})
         json = getJson({"flag":"yes"})
@@ -127,6 +139,7 @@ def newsDel(request):
         json = getJson({"flag":"no"})
     return HttpResponse(json)
 #标注热点新闻
+@login_required(login_url="/console/login/")
 def newsPointHot(request):
     if request.POST.get("ids") and request.POST.get("hot"):
         try:
@@ -142,6 +155,7 @@ def newsPointHot(request):
         json = getJson({"flag":"no"})
     return HttpResponse(json)
 #新闻图片
+@login_required(login_url="/console/login/")
 def newsPic(request,id):
     try:
         news = News.objects.get(id=int(id))
@@ -149,6 +163,7 @@ def newsPic(request,id):
         return Http404()
     return consoleRender(r"adminConsole"+os.path.sep+"news"+os.path.sep+"news_pic.html",{"news":news},request)
 #上传图片
+@login_required(login_url="/console/login/")
 def newsPicUpload(request):
     if request.POST.get("id"):
         try:
@@ -163,6 +178,7 @@ def newsPicUpload(request):
         json = getJson({"flag":"no"})
     return HttpResponse(json)
 #删除图片
+@login_required(login_url="/console/login/")
 def newPicDel(request):
     if request.POST.get("delId"):
         try:
@@ -174,8 +190,10 @@ def newPicDel(request):
         json = getJson({"flag":"no"})
     return HttpResponse(json)
 #任务页面
+@login_required(login_url="/console/login/")
 def taskIndex(request):
     return  consoleRender(r"adminConsole"+os.path.sep+"task"+os.path.sep+"task.html",{},request)
+@login_required(login_url="/console/login/")
 def taskList(request):
     page,pageSize =1,10
     if request.POST.get("page") and request.POST.get("rows"):
@@ -189,8 +207,10 @@ def taskList(request):
         end = len(manager)
     json = getJson({"rows":manager[(page-1)*pageSize:end],"total":len(manager)})
     return HttpResponse(json)
+@login_required(login_url="/console/login/")
 def taskAddPre(request):
     return  consoleRender(r"adminConsole"+os.path.sep+"task"+os.path.sep+"taskAdd.html",{},request)
+@login_required(login_url="/console/login/")
 def taskAdd(request):
     try:
         json = getJson({"flag":"yes"})
@@ -205,6 +225,7 @@ def taskAdd(request):
         print e
         json = getJson({"flag":"no"})
     return HttpResponse(json)
+@login_required(login_url="/console/login/")
 def delTask(request):
     try:
         if request.POST.get("id"):
@@ -216,12 +237,14 @@ def delTask(request):
     except BaseException:
         json = getJson({"flag":"no"})
     return HttpResponse(json)
+@login_required(login_url="/console/login/")
 def taskEditPre(request,id):
     try:
         task = ContentTask.objects.get(id=int(id))
     except BaseException:
         return Http404()
     return consoleRender(r"adminConsole"+os.path.sep+"task"+os.path.sep+"taskEdit.html",{"task":task},request)
+@login_required(login_url="/console/login/")
 def taskEdit(request):
     try:
         task = ContentTask.objects.get(id=int(request.POST["id"]))
@@ -234,6 +257,7 @@ def taskEdit(request):
     except BaseException as e:
         json = getJson({"flag":"no"})
     return HttpResponse(json)
+@login_required(login_url="/console/login/")
 def taskUpdate(request):
     try:
         task = ContentTask.objects.get(id=int(request.POST["id"]))
@@ -245,5 +269,3 @@ def taskUpdate(request):
     except BaseException as e:
         json = getJson({"flag":"no"})
     return HttpResponse(json)
-
-

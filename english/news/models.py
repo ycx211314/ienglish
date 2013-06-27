@@ -46,6 +46,10 @@ class News(models.Model):
         self.readCount = 0
         self.shareCount = 0
         super(News, self).save(*args, **kwargs)
+    def delete(self, using=None):
+        for res in self.newsres_set.all():
+            res.delete()
+        super(News,self).delete()
 class NewsCategory(models.Model):
     typeName = models.CharField(max_length=10)
     typeUrl = models.CharField(max_length=20)
@@ -54,6 +58,10 @@ class NewsCategory(models.Model):
 class NewsRes(models.Model):
     resUrl = models.ImageField(upload_to="newsImage")
     newsId = models.ForeignKey("News")
+    def delete(self, using=None):
+        from english.util.storagetool import delFile
+        delFile(self.resUrl.name)
+        models.Model.delete(self)
 class Comment(models.Model):
     user = models.ForeignKey("studyuser.StudyUser")
     message = models.CharField(max_length=200)
